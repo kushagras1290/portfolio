@@ -13,7 +13,7 @@ export default function Nav() {
 
   return (
     <nav id="nav">
-      <Link to="/" className="nav-brand">KUSHAGRA <em>SINGH</em></Link>
+      <Link to="/" className="nav-brand"><em>KUSHAGRA</em> <em>SINGH</em></Link>
       <ul className="nav-links">
         <li><NavLink to="/experience">Experience</NavLink></li>
         <li><NavLink to="/projects">Projects</NavLink></li>
