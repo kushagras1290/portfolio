@@ -17,7 +17,7 @@ export default function Home() {
                 STATUS: <span style={{ color: 'var(--neural-lime)', fontWeight: 600, letterSpacing: '0.16em', textShadow: '0 0 12px rgba(200,240,106,0.45)' }}>OPEN_TO_WORK</span>
               </p>
               <h1 className="hero-title">
-                KUSHAGRA
+                <span className="lime">KUSHAGRA</span>
                 <span className="lime">SINGH</span>
               </h1>
               <p className="hero-sub">
