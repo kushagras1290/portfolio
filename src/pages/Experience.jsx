@@ -32,7 +32,20 @@ export default function Experience() {
               <div className="exp-card reveal" key={job.id}>
                 <div className="exp-top">
                   <div>
-                    <div className="exp-co">{job.company}</div>
+                    <div className="exp-co">
+                      {job.link ? (
+                        <a
+                          href={job.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="exp-co-link"
+                        >
+                          {job.company} <span style={{ color: 'var(--neural-lime)' }}>↗</span>
+                        </a>
+                      ) : (
+                        job.company
+                      )}
+                    </div>
                     <div className="exp-role">{job.role}</div>
                   </div>
                   <div className="exp-when">

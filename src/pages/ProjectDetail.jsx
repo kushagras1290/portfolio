@@ -86,6 +86,20 @@ export default function ProjectDetail() {
 
             {/* Sidebar */}
             <div className="proj-detail-sidebar reveal">
+              {project.link && (
+                <>
+                  <div className="proj-detail-sidebar-label">// Live Link</div>
+                  <a
+                    href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-ghost"
+                    style={{ display: 'inline-flex', marginBottom: '2rem' }}
+                  >
+                    Visit Site ↗
+                  </a>
+                </>
+              )}
               <div className="proj-detail-sidebar-label">// Tech Stack</div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem', marginBottom: '2rem' }}>
                 {project.stack.map(s => (

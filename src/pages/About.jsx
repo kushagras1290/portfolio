@@ -34,11 +34,13 @@ export default function About() {
             <div style={{ background: 'var(--surface)', padding: '2.5rem' }} className="reveal">
               <div className="exp-sub-title">Who I Am</div>
               <p style={{ fontSize: '0.9rem', lineHeight: 1.85, color: 'var(--on-surface-var)' }}>
-                AI &amp; Automation Engineer with production experience building WhatsApp bots
-                (30 languages, GPT-5.2), voice AI trainers (OpenAI Realtime API, 18 personalities),
-                AI image pipelines (Seedream v4.5), CEO-level task delegation systems, and internal
-                business automation. Deep fluency in Python/Flask/React/OpenAI. Deployed on Render
-                with Supabase. Domain authority in Vedic gemology and LLM engineering.
+                AI &amp; Automation Engineer currently solo-building True Grit, a full-stack D2C
+                e-commerce platform on Cloudflare Workers/D1, alongside production experience
+                building WhatsApp bots (30 languages, GPT-5.2), voice AI trainers (OpenAI Realtime
+                API, 18 personalities), AI image pipelines (Seedream v4.5), CEO-level task
+                delegation systems, and internal business automation. Deep fluency in
+                Python/Flask/React/OpenAI. Deployed on Render, Cloudflare, and Vercel with Supabase.
+                Domain authority in Vedic gemology and LLM engineering.
               </p>
             </div>
             <div style={{ background: 'var(--surface)', padding: '2.5rem' }} className="reveal">

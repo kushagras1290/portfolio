@@ -1,7 +1,28 @@
 export const PROFESSIONAL_PROJECTS = [
   {
-    id: 'whatsapp-lead-bot',
+    id: 'true-grit',
     num: '01',
+    badge: 'PRODUCTION · FOUNDER',
+    featured: true,
+    name: 'True Grit — D2C E-Commerce Platform',
+    tagline: 'Solo-built full-stack organic food storefront · 277+ test API suite',
+    link: 'https://truegritin.com/',
+    desc: 'Architected and built True Grit, a full-stack D2C organic food e-commerce platform from the ground up as sole engineer and founder — FastAPI on Cloudflare Workers/D1, a server-rendered React storefront, and Razorpay/PayPal/COD checkout, backed by a 277+ test API integration suite. Owns brand and growth end-to-end: defined the brand identity and tagline "Pure By Nature, True by Choice," resolved a zero-Google-indexing issue, and is running an E-E-A-T and backlink strategy from scratch.',
+    stack: ['FastAPI', 'Cloudflare Workers', 'Cloudflare D1', 'React', 'Razorpay', 'PayPal', 'SEO / E-E-A-T'],
+    highlights: [
+      'Full-stack D2C organic food e-commerce platform built and owned solo, end-to-end',
+      'FastAPI backend running on Cloudflare Workers with Cloudflare D1 as the database layer',
+      'Server-rendered React storefront for fast first-paint and SEO-friendly product pages',
+      'Checkout supports Razorpay, PayPal, and Cash on Delivery',
+      '277+ test API integration suite covering checkout, catalog, and order flows',
+      'Defined brand identity and tagline: "Pure By Nature, True by Choice"',
+      'Diagnosed and fixed a zero-Google-indexing issue blocking organic discovery',
+      'Running an E-E-A-T and backlink strategy from scratch to build domain authority',
+    ],
+  },
+  {
+    id: 'whatsapp-lead-bot',
+    num: '02',
     badge: 'PRODUCTION',
     featured: true,
     name: 'WhatsApp Lead-Qualification Chatbot',
@@ -20,7 +41,7 @@ export const PROFESSIONAL_PROJECTS = [
   },
   {
     id: 'voice-sales-trainer',
-    num: '02',
+    num: '03',
     badge: 'PRODUCTION',
     featured: false,
     name: 'Voice-Based AI Sales Trainer',
@@ -39,7 +60,7 @@ export const PROFESSIONAL_PROJECTS = [
   },
   {
     id: 'ceo-task-delegation',
-    num: '03',
+    num: '04',
     badge: 'PRODUCTION',
     featured: false,
     name: 'CEO WhatsApp Task Delegation System',
@@ -58,7 +79,7 @@ export const PROFESSIONAL_PROJECTS = [
   },
   {
     id: 'jewelry-photography-pipeline',
-    num: '04',
+    num: '05',
     badge: 'PRODUCTION',
     featured: false,
     name: 'AI Jewelry Photography Pipeline',
@@ -76,7 +97,7 @@ export const PROFESSIONAL_PROJECTS = [
   },
   {
     id: 'refund-fms',
-    num: '05',
+    num: '06',
     badge: 'PRODUCTION',
     featured: false,
     name: 'Refund Flow Management System',
@@ -95,7 +116,7 @@ export const PROFESSIONAL_PROJECTS = [
   },
   {
     id: 'shipment-system',
-    num: '06',
+    num: '07',
     badge: 'PRODUCTION',
     featured: false,
     name: 'Intra-Office Shipment System',
@@ -114,7 +135,7 @@ export const PROFESSIONAL_PROJECTS = [
   },
   {
     id: 'sales-acumen-test',
-    num: '07',
+    num: '08',
     badge: 'PRODUCTION',
     featured: false,
     name: 'Sales Acumen Test System',
@@ -133,7 +154,7 @@ export const PROFESSIONAL_PROJECTS = [
   },
   {
     id: 'college-course-test',
-    num: '08',
+    num: '09',
     badge: 'PRODUCTION',
     featured: false,
     name: 'College Course Hiring Test System',
@@ -151,7 +172,7 @@ export const PROFESSIONAL_PROJECTS = [
   },
   {
     id: 'lq-executive-trainer',
-    num: '09',
+    num: '10',
     badge: 'PRODUCTION',
     featured: false,
     name: 'LQ Executive Trainer',
@@ -170,7 +191,7 @@ export const PROFESSIONAL_PROJECTS = [
   },
   {
     id: 'pricing-intelligence',
-    num: '10',
+    num: '11',
     badge: 'PRODUCTION',
     featured: false,
     name: 'Gemstone Rarity & Pricing Intelligence Engine',
@@ -189,7 +210,7 @@ export const PROFESSIONAL_PROJECTS = [
   },
   {
     id: 'gemstone-slm',
-    num: '11',
+    num: '12',
     badge: 'PRODUCTION · R&D',
     featured: false,
     name: 'Gemstone Domain SLM',
@@ -360,6 +381,42 @@ export const FREELANCE_PROJECTS = [
       'Competitor benchmarking panel with side-by-side comparison',
       'Automated Slack alerts on configurable sentiment threshold breaches',
       'Streaming pipeline via WebSockets for live dashboard updates',
+    ],
+  },
+  {
+    id: 'pharmacy-seo-intelligence',
+    num: '09',
+    badge: 'FREELANCE · SEO / AGENTS',
+    featured: false,
+    name: 'Pharmacy SEO Competitive Intelligence System',
+    tagline: 'Claude Code agents + n8n pipeline tracking rankings, content gaps, and backlinks',
+    desc: 'Automated competitive-intelligence pipeline for the pharmacy SEO space, orchestrated with Claude Code agents and n8n workflows and backed by Supabase — continuously tracking competitor keyword rankings, content gaps, and backlink movement. Paired with a custom Hunter.io MCP server exposing email discovery, verification, and enrichment as callable tools for LLM-driven cold-outreach agents.',
+    stack: ['Claude Code Agents', 'n8n', 'Supabase', 'MCP', 'Hunter.io', 'Python'],
+    highlights: [
+      'Claude Code agents orchestrated via n8n for autonomous competitive research',
+      'Tracks competitor keyword rankings across the pharmacy SEO vertical',
+      'Content gap analysis surfaces topics competitors rank for that the client doesn’t cover',
+      'Backlink movement tracking flags new and lost referring domains',
+      'Custom Hunter.io MCP server: email discovery, verification, and enrichment as LLM tool calls',
+      'Enables LLM-driven cold-outreach agents to source and verify contacts autonomously',
+      'Supabase backend persists historical ranking and backlink snapshots for trend analysis',
+    ],
+  },
+  {
+    id: 'pharmdel-website-scanner',
+    num: '10',
+    badge: 'FREELANCE · CLIENT',
+    featured: false,
+    name: 'Pharmdel Pharmacy Website Scanner',
+    tagline: 'Automated crawl-and-sync across every pharmacy site in the network',
+    desc: 'Automated scanner that crawls every pharmacy website in Pharmdel’s network and syncs each one to the latest version — keeping listings and content continuously up to date across the network without manual intervention.',
+    stack: ['Python', 'Web Scraping', 'Automation', 'Supabase'],
+    highlights: [
+      'Crawls every pharmacy website across Pharmdel’s entire network on a recurring schedule',
+      'Detects stale or outdated listings and content per site',
+      'Automatically syncs each site to the latest approved version',
+      'Eliminates manual per-site update work across the network',
+      'Built for Pharmdel (UK & Ireland) alongside the existing Customer Support Portal engagement',
     ],
   },
 ];
@@ -610,6 +667,23 @@ export const ALL_PROJECTS = [
 
 export const EXPERIENCE = [
   {
+    id: 'truegrit',
+    company: 'True Grit',
+    link: 'https://truegritin.com/',
+    role: 'AI/ML Tech Lead (Founder)',
+    period: 'Jul 2026 – Present',
+    location: 'Remote · Solo-Built',
+    sections: [
+      {
+        title: 'Full-Stack D2C E-Commerce Platform (Solo-Built)',
+        bullets: [
+          'Architected and built True Grit, a full-stack D2C organic food e-commerce platform from the ground up — FastAPI on Cloudflare Workers/D1, a server-rendered React storefront, and Razorpay/PayPal/COD checkout, backed by a 277+ test API integration suite.',
+          'Own brand and growth end-to-end — defined the brand identity and tagline "Pure By Nature, True by Choice," fixed a zero-Google-indexing issue, and are running an E-E-A-T and backlink strategy from scratch.',
+        ],
+      },
+    ],
+  },
+  {
     id: 'gempundit',
     company: 'GemPundit / Fortuna Retail Pvt. Ltd.',
     role: 'AI & Automation Engineer',
@@ -672,15 +746,16 @@ export const SKILLS = {
     title: 'AI / ML / LLM Engineering',
     groups: [
       { color: 'lime', pills: ['Machine Learning', 'Deep Learning', 'Computer Vision', 'NLP', 'Reinforcement Learning'] },
-      { color: 'cyan', pills: ['Generative AI', 'LLM Fine-Tuning', 'Prompt Engineering', 'Transformers', 'Diffusers', 'RAG Pipelines', 'LangChain', 'LangGraph', 'Agentic AI'] },
+      { color: 'cyan', pills: ['Generative AI', 'LLM Fine-Tuning', 'Prompt Engineering', 'Transformers', 'Diffusers', 'RAG Pipelines', 'LangChain', 'LangGraph', 'Agentic AI', 'MCP (Model Context Protocol)', 'Claude Code'] },
       { color: 'amber', pills: ['PyTorch', 'TensorFlow', 'Keras', 'Seedream v4.5', 'Hugging Face', 'n8n'] },
     ],
   },
   infra: {
     title: 'Platforms & Infrastructure',
     groups: [
-      { color: 'lime', pills: ['Supabase', 'Render', 'GitHub', 'Docker', 'Linux / Ubuntu'] },
-      { color: 'cyan', pills: ['PostgreSQL', 'MySQL', 'Redis', 'WebSockets', 'Webhooks'] },
+      { color: 'lime', pills: ['Supabase', 'Render', 'Vercel', 'Cloudflare Workers', 'GitHub', 'Docker', 'Linux / Ubuntu'] },
+      { color: 'cyan', pills: ['PostgreSQL', 'MySQL', 'Neon', 'Cloudflare D1', 'Redis', 'WebSockets', 'Webhooks'] },
+      { color: 'amber', pills: ['Razorpay', 'PayPal', 'Payment Integration', 'Hostinger'] },
     ],
   },
   ds: {
