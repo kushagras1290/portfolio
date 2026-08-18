@@ -59,11 +59,11 @@ export default function Home() {
               <div className="t-body">
                 <span className="tl"><span className="tp">kushagra@ai-node</span><span className="tpath">:~$</span> <span className="tcmd">./init_profile.sh</span></span>
                 <span className="tl tcmt"># Loading profile…</span>
-                <span className="tl tout">[INFO] Role    : AI/ML Tech Lead (Founder) — True Grit</span>
+                <span className="tl tout">[INFO] Role    : AI/ML Tech Lead — True Grit</span>
                 <span className="tl tout">[INFO] Status  : Open to Work · Aug 2026</span>
                 <span className="tl tout">[INFO] Stack   : Python · LangGraph · React · OpenAI</span>
                 <span className="tl tout">[INFO] Location: Gurugram, India</span>
-                <span className="tl tok">[OK]   True Grit → D2C platform · 277+ test suite</span>
+                <span className="tl tok">[OK]   True Grit → farm-to-consumer platform · 100 languages</span>
                 <span className="tl tok">[OK]   WhatsApp bot → 30 langs · GPT-5.2</span>
                 <span className="tl tok">[OK]   Multi-agent RAG → 92% relevance · sub-3s</span>
                 <span className="tl tok">[OK]   Voice trainer → 18 AI personalities</span>
@@ -95,7 +95,7 @@ export default function Home() {
             background: 'var(--outline-variant)',
           }}>
             {[
-              { to: '/experience', label: 'Experience', sub: 'True Grit (Founder) + GemPundit / Fortuna Retail', num: '01' },
+              { to: '/experience', label: 'Experience', sub: 'True Grit + GemPundit / Fortuna Retail', num: '01' },
               { to: '/projects', label: 'Projects', sub: '40+ systems built & shipped', num: '02' },
               { to: '/skills', label: 'Skills', sub: 'Languages, AI/ML, Infra & more', num: '03' },
               { to: '/education', label: 'Education', sub: 'VIT Bhopal · B.Tech CSE AI/ML', num: '04' },
