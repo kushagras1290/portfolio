@@ -34,14 +34,17 @@ export default function About() {
             <div style={{ background: 'var(--surface)', padding: '2.5rem' }} className="reveal">
               <div className="exp-sub-title">Who I Am</div>
               <p style={{ fontSize: '0.9rem', lineHeight: 1.85, color: 'var(--on-surface-var)' }}>
-                AI &amp; Automation Engineer currently building True Grit, a multilingual
-                farm-to-consumer e-commerce platform (React/TypeScript storefront, FastAPI admin
-                panel on Cloudflare Workers/D1/R2, localized across 100 languages), alongside
-                production experience building WhatsApp bots (30 languages, GPT-5.2), voice AI
-                trainers (OpenAI Realtime API, 18 personalities), AI image pipelines (Seedream
-                v4.5), CEO-level task delegation systems, and internal business automation. Deep
-                fluency in Python/Flask/React/OpenAI. Deployed on Render, Cloudflare, and Vercel
-                with Supabase. Domain authority in Vedic gemology and LLM engineering.
+                AI Engineer &amp; Full-Stack Developer with 4 years of experience spanning
+                e-commerce, pharmacy, and legal-tech, plus a 4-year independent freelance
+                practice building production systems end to end. Most recently a Contract AI
+                Engineer at GemPundit — WhatsApp bots (30+ languages, GPT-5.2), voice AI sales
+                trainers (OpenAI Realtime API, 18 personalities), and internal business
+                automation — and currently freelancing on True Grit, a full-stack, Cloudflare-native
+                e-commerce platform with five standalone ML/AI subsystems. Deep fluency across
+                Python/FastAPI/Flask/React, agentic AI (LangChain/LangGraph), and cloud infra
+                (Cloudflare Workers/D1/R2/KV, Render, Hostinger, Supabase). Domain range spans
+                conversational AI, demand forecasting, fraud detection, incident response, and
+                legal-document intelligence.
               </p>
             </div>
             <div style={{ background: 'var(--surface)', padding: '2.5rem' }} className="reveal">
@@ -49,8 +52,9 @@ export default function About() {
               <ul className="bullets">
                 <li><strong>Conversational AI</strong> — WhatsApp bots, voice trainers, LLM pipelines</li>
                 <li><strong>Business Automation</strong> — n8n, webhooks, task delegation, OCR pipelines</li>
-                <li><strong>Full-Stack AI Apps</strong> — React + Flask + Supabase + Render</li>
+                <li><strong>Full-Stack AI Apps</strong> — React/Next.js + FastAPI/Flask + Cloudflare/Supabase</li>
                 <li><strong>Agentic Systems</strong> — LangGraph, multi-agent RAG, tool-using LLMs</li>
+                <li><strong>Distributed Systems &amp; Observability</strong> — Temporal, OpenTelemetry, ClickHouse, Redpanda</li>
                 <li><strong>Computer Vision</strong> — Seedream, ComfyUI, OpenCV, image classification</li>
               </ul>
             </div>

@@ -21,18 +21,18 @@ export default function Home() {
                 <span className="lime">SINGH</span>
               </h1>
               <p className="hero-sub">
-                AI &amp; Automation Engineer building production-grade intelligent systems —
-                conversational bots, LLM pipelines, voice AI, and full-stack automation.
-                Architecture, code, deployment: solo.
+                AI Engineer &amp; Full-Stack Developer with 4 years of experience across
+                e-commerce, pharmacy, and legal-tech — conversational bots, agentic AI,
+                voice AI, and full-stack automation. Architecture, code, deployment: solo.
               </p>
               <div className="hero-chips">
                 <span className="chip">Python</span>
                 <span className="chip">Flask / FastAPI</span>
                 <span className="chip">React.js</span>
                 <span className="chip cyan">LLM Engineering</span>
-                <span className="chip cyan">OpenAI Realtime API</span>
+                <span className="chip cyan">Agentic AI</span>
                 <span className="chip cyan">Conversational AI</span>
-                <span className="chip amber">Supabase</span>
+                <span className="chip amber">Cloudflare</span>
                 <span className="chip">Computer Vision</span>
                 <span className="chip">Prompt Engineering</span>
               </div>
@@ -59,15 +59,15 @@ export default function Home() {
               <div className="t-body">
                 <span className="tl"><span className="tp">kushagra@ai-node</span><span className="tpath">:~$</span> <span className="tcmd">./init_profile.sh</span></span>
                 <span className="tl tcmt"># Loading profile…</span>
-                <span className="tl tout">[INFO] Role    : AI/ML Tech Lead — True Grit</span>
-                <span className="tl tout">[INFO] Status  : Open to Work · Aug 2026</span>
-                <span className="tl tout">[INFO] Stack   : Python · LangGraph · React · OpenAI</span>
+                <span className="tl tout">[INFO] Role    : AI Engineer | Full-Stack Developer</span>
+                <span className="tl tout">[INFO] Status  : Open to Work · Freelancing (True Grit)</span>
+                <span className="tl tout">[INFO] Stack   : Python · FastAPI · React · LangGraph</span>
                 <span className="tl tout">[INFO] Location: Gurugram, India</span>
-                <span className="tl tok">[OK]   True Grit → farm-to-consumer platform · 100 languages</span>
-                <span className="tl tok">[OK]   WhatsApp bot → 30 langs · GPT-5.2</span>
+                <span className="tl tok">[OK]   True Grit → Cloudflare-native commerce · 5 ML/AI subsystems</span>
+                <span className="tl tok">[OK]   GemPundit → WhatsApp bot · 30+ langs · GPT-5.2</span>
+                <span className="tl tok">[OK]   Pharmdel → support portal · 10K+ tickets · UK &amp; Ireland</span>
                 <span className="tl tok">[OK]   Multi-agent RAG → 92% relevance · sub-3s</span>
-                <span className="tl tok">[OK]   Voice trainer → 18 AI personalities</span>
-                <span className="tl twarn">[STAT] 40+ projects · 10 freelance engagements</span>
+                <span className="tl twarn">[STAT] 4 years experience · 40+ projects shipped</span>
                 <span className="tl twarn">[STAT] 2× National Hackathon Finalist</span>
                 <span className="tl">
                   <span className="tp">kushagra@ai-node</span>
@@ -95,7 +95,7 @@ export default function Home() {
             background: 'var(--outline-variant)',
           }}>
             {[
-              { to: '/experience', label: 'Experience', sub: 'True Grit + GemPundit / Fortuna Retail', num: '01' },
+              { to: '/experience', label: 'Experience', sub: 'GemPundit · Pharmdel · Draft AI · Legal Firm', num: '01' },
               { to: '/projects', label: 'Projects', sub: '40+ systems built & shipped', num: '02' },
               { to: '/skills', label: 'Skills', sub: 'Languages, AI/ML, Infra & more', num: '03' },
               { to: '/education', label: 'Education', sub: 'VIT Bhopal · B.Tech CSE AI/ML', num: '04' },
