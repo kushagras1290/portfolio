@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useScrollReveal } from '../hooks/useScrollReveal.js';
 import { SKILLS } from '../data/index.js';
@@ -15,9 +15,22 @@ const TAB_LABELS = {
 
 export default function Skills() {
   const [active, setActive] = useState('lang');
+  const [query, setQuery] = useState('');
   useScrollReveal();
 
   const current = SKILLS[active];
+  const normalizedQuery = query.trim().toLowerCase();
+
+  const searchResults = useMemo(() => {
+    if (!normalizedQuery) return null;
+    return Object.values(SKILLS).flatMap(category =>
+      category.groups.flatMap(group =>
+        group.pills
+          .filter(pill => pill.toLowerCase().includes(normalizedQuery))
+          .map(pill => ({ pill, color: group.color, category: category.title }))
+      )
+    );
+  }, [normalizedQuery]);
 
   return (
     <div className="page-enter">
@@ -37,34 +50,72 @@ export default function Skills() {
 
       <section style={{ background: 'var(--deep-charcoal)' }}>
         <div className="container">
-          <div className="skills-wrap reveal">
-            <div className="skills-nav">
-              {Object.entries(TAB_LABELS).map(([key, label]) => (
-                <button
-                  key={key}
-                  className={`s-btn ${active === key ? 'on' : ''}`}
-                  onClick={() => setActive(key)}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-            <div className="skills-body">
-              <div className="sg-title">{current.title}</div>
-              {current.groups.map((group, gi) => (
-                <div className="pill-row" key={gi}>
-                  {group.pills.map(pill => (
+          <div className="project-search-row" style={{ marginBottom: '2rem', marginTop: 0 }}>
+            <label className="project-search">
+              <span className="project-search-icon" aria-hidden="true">⌕</span>
+              <span className="sr-only">Search all skills</span>
+              <input
+                type="search"
+                value={query}
+                onChange={e => setQuery(e.target.value)}
+                placeholder="Search all skills across every category…"
+              />
+            </label>
+            {searchResults && (
+              <span className="project-result-count" aria-live="polite">
+                {searchResults.length} result{searchResults.length === 1 ? '' : 's'}
+              </span>
+            )}
+          </div>
+
+          {searchResults ? (
+            <div className="skills-body reveal">
+              {searchResults.length === 0 ? (
+                <p style={{ color: 'var(--muted-code)' }}>No matching skills. Try a different term.</p>
+              ) : (
+                <div className="pill-row">
+                  {searchResults.map(r => (
                     <span
-                      key={pill}
-                      className={`skill-pill ${PILL_CLASS[group.color] || ''}`}
+                      key={`${r.category}-${r.pill}`}
+                      className={`skill-pill ${PILL_CLASS[r.color] || ''}`}
+                      title={r.category}
                     >
-                      {pill}
+                      {r.pill}
                     </span>
                   ))}
                 </div>
-              ))}
+              )}
             </div>
-          </div>
+          ) : (
+            <div className="skills-wrap reveal">
+              <div className="skills-nav">
+                {Object.entries(TAB_LABELS).map(([key, label]) => (
+                  <button
+                    key={key}
+                    className={`s-btn ${active === key ? 'on' : ''}`}
+                    onClick={() => setActive(key)}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+              <div className="skills-body">
+                <div className="sg-title">{current.title}</div>
+                {current.groups.map((group, gi) => (
+                  <div className="pill-row" key={gi}>
+                    {group.pills.map(pill => (
+                      <span
+                        key={pill}
+                        className={`skill-pill ${PILL_CLASS[group.color] || ''}`}
+                      >
+                        {pill}
+                      </span>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </section>
     </div>

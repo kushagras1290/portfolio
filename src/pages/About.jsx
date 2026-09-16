@@ -24,38 +24,33 @@ export default function About() {
       {/* Bio strip */}
       <section style={{ background: 'var(--void-black)', paddingBottom: 0 }}>
         <div className="container">
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: '1px',
-            background: 'var(--outline-variant)',
-            marginBottom: '1px',
-          }}>
-            <div style={{ background: 'var(--surface)', padding: '2.5rem' }} className="reveal">
+          <div className="bio-grid">
+            <div className="bio-card reveal">
               <div className="exp-sub-title">Who I Am</div>
               <p style={{ fontSize: '0.9rem', lineHeight: 1.85, color: 'var(--on-surface-var)' }}>
                 AI Engineer &amp; Full-Stack Developer with 4 years of experience spanning
                 e-commerce, pharmacy, and legal-tech, plus a 4-year independent freelance
                 practice building production systems end to end. Most recently a Contract AI
-                Engineer at GemPundit — WhatsApp bots (30+ languages, GPT-5.2), voice AI sales
+                Engineer at GemPundit, building WhatsApp bots (30+ languages, GPT-5.2), voice AI sales
                 trainers (OpenAI Realtime API, 18 personalities), and internal business
-                automation — and currently freelancing on True Grit, a full-stack, Cloudflare-native
+                automation, and currently freelancing on True Grit, a full-stack, Cloudflare-native
                 e-commerce platform with five standalone ML/AI subsystems. Deep fluency across
                 Python/FastAPI/Flask/React, agentic AI (LangChain/LangGraph), and cloud infra
                 (Cloudflare Workers/D1/R2/KV, Render, Hostinger, Supabase). Domain range spans
-                conversational AI, demand forecasting, fraud detection, incident response, and
-                legal-document intelligence.
+                conversational AI, demand forecasting, fraud detection, route optimization,
+                incident response, and legal-document intelligence.
               </p>
             </div>
-            <div style={{ background: 'var(--surface)', padding: '2.5rem' }} className="reveal">
+            <div className="bio-card reveal">
               <div className="exp-sub-title">What I Do</div>
               <ul className="bullets">
-                <li><strong>Conversational AI</strong> — WhatsApp bots, voice trainers, LLM pipelines</li>
-                <li><strong>Business Automation</strong> — n8n, webhooks, task delegation, OCR pipelines</li>
-                <li><strong>Full-Stack AI Apps</strong> — React/Next.js + FastAPI/Flask + Cloudflare/Supabase</li>
-                <li><strong>Agentic Systems</strong> — LangGraph, multi-agent RAG, tool-using LLMs</li>
-                <li><strong>Distributed Systems &amp; Observability</strong> — Temporal, OpenTelemetry, ClickHouse, Redpanda</li>
-                <li><strong>Computer Vision</strong> — Seedream, ComfyUI, OpenCV, image classification</li>
+                <li><strong>Conversational AI:</strong> WhatsApp bots, voice trainers, LLM pipelines</li>
+                <li><strong>Business Automation:</strong> n8n, webhooks, task delegation, OCR pipelines</li>
+                <li><strong>Full-Stack AI Apps:</strong> React/Next.js + FastAPI/Flask + Cloudflare/Supabase</li>
+                <li><strong>Agentic Systems:</strong> LangGraph, multi-agent RAG, tool-using LLMs</li>
+                <li><strong>Distributed Systems &amp; Observability:</strong> Temporal, OpenTelemetry, ClickHouse, Redpanda</li>
+                <li><strong>Optimization &amp; Geo Systems:</strong> Contraction Hierarchies, Dijkstra, OpenStreetMap, MapLibre</li>
+                <li><strong>Computer Vision:</strong> Seedream, ComfyUI, OpenCV, image classification</li>
               </ul>
             </div>
           </div>

@@ -1,16 +1,28 @@
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useScrollReveal } from '../hooks/useScrollReveal.js';
 import { ALL_PROJECTS } from '../data/index.js';
+import { showToast } from '../lib/toast.js';
 
-function getCategoryLabel(badge) {
+async function copyProjectLink() {
+  try {
+    await navigator.clipboard.writeText(window.location.href);
+    showToast('Project link copied to clipboard');
+  } catch {
+    showToast("Couldn't copy the link. Copy it manually from the address bar.");
+  }
+}
+
+function getCategoryLabel(project) {
+  if (project.category) return project.category;
+  const { badge } = project;
   if (badge.includes('FREELANCE')) return 'freelance';
   if (badge.includes('COLLEGE')) return 'college';
+  if (badge.includes('INDEPENDENT')) return 'independent';
   return 'professional';
 }
 
 export default function ProjectDetail() {
   const { slug } = useParams();
-  const navigate = useNavigate();
   useScrollReveal();
 
   const idx = ALL_PROJECTS.findIndex(p => p.id === slug);
@@ -29,7 +41,7 @@ export default function ProjectDetail() {
 
   const prevProject = idx > 0 ? ALL_PROJECTS[idx - 1] : null;
   const nextProject = idx < ALL_PROJECTS.length - 1 ? ALL_PROJECTS[idx + 1] : null;
-  const category = getCategoryLabel(project.badge);
+  const category = getCategoryLabel(project);
 
   return (
     <div className="page-enter">
@@ -73,22 +85,29 @@ export default function ProjectDetail() {
           <div className="proj-detail-grid">
             {/* Main content */}
             <div>
-              <div className="proj-detail-section-label">// Overview</div>
+              <div className="proj-detail-section-label">Overview</div>
               <p className="proj-detail-overview">{project.desc}</p>
 
-              <div className="proj-detail-section-label">// Key Highlights</div>
+              <div className="proj-detail-section-label">Key Highlights</div>
               <ul className="proj-highlights">
                 {project.highlights.map((h, i) => (
                   <li key={i}>{h}</li>
                 ))}
               </ul>
+
+              {project.evidence && (
+                <div className="project-evidence-note">
+                  <div className="proj-detail-section-label">Evidence Note</div>
+                  <p>{project.evidence}</p>
+                </div>
+              )}
             </div>
 
             {/* Sidebar */}
             <div className="proj-detail-sidebar reveal">
               {project.link && (
                 <>
-                  <div className="proj-detail-sidebar-label">// Live Link</div>
+                  <div className="proj-detail-sidebar-label">Live Link</div>
                   <a
                     href={project.link}
                     target="_blank"
@@ -100,26 +119,36 @@ export default function ProjectDetail() {
                   </a>
                 </>
               )}
-              <div className="proj-detail-sidebar-label">// Tech Stack</div>
+              <div className="proj-detail-sidebar-label">Tech Stack</div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem', marginBottom: '2rem' }}>
                 {project.stack.map(s => (
                   <span className="skill-pill" key={s}>{s}</span>
                 ))}
               </div>
 
-              <div className="proj-detail-sidebar-label">// Category</div>
+              <div className="proj-detail-sidebar-label">Category</div>
               <p style={{ fontSize: '0.85rem', color: 'var(--on-surface-var)', marginBottom: '2rem', textTransform: 'capitalize' }}>
                 {category}
               </p>
 
-              <div className="proj-detail-sidebar-label">// Highlights Count</div>
+              {project.status && (
+                <>
+                  <div className="proj-detail-sidebar-label">Current Status</div>
+                  <p className="project-status-copy">{project.status}</p>
+                </>
+              )}
+
+              <div className="proj-detail-sidebar-label">Highlights Count</div>
               <p style={{ fontSize: '0.85rem', color: 'var(--on-surface-var)', marginBottom: '2rem' }}>
                 {project.highlights.length} technical details documented
               </p>
 
-              <Link to="/projects" className="btn-back" style={{ display: 'inline-flex' }}>
-                ← Back to Projects
-              </Link>
+              <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
+                <Link to="/projects" className="btn-back">← Back to Projects</Link>
+                <button type="button" className="btn-back" onClick={copyProjectLink}>
+                  ⧉ Copy Link
+                </button>
+              </div>
             </div>
           </div>
         </div>

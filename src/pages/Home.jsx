@@ -1,29 +1,55 @@
-import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useScrollReveal } from '../hooks/useScrollReveal.js';
+import { ALL_PROJECTS } from '../data/index.js';
+import InteractiveTerminal from '../components/InteractiveTerminal.jsx';
+import LiveClock from '../components/LiveClock.jsx';
 
+const FEATURED_IDS = ['true-grit', 'route-optimizer', 'pharmdel-support', 'aegis-sre'];
+
+const QUICK_LINKS = [
+  { to: '/experience', label: 'Experience', sub: 'GemPundit · Pharmdel · Draft AI · Legal Firm', num: '01' },
+  { to: '/projects', label: 'Projects', sub: 'systems documented in depth', num: '02' },
+  { to: '/skills', label: 'Skills', sub: 'Languages, AI/ML, Infra & more', num: '03' },
+  { to: '/education', label: 'Education', sub: 'VIT Bhopal · B.Tech CSE AI/ML', num: '04' },
+  { to: '/about', label: 'About', sub: '2× National Hackathon Finalist', num: '05' },
+  { to: '/contact', label: 'Contact', sub: 'Open to roles & collaboration', num: '06' },
+];
+
+function KineticText({ text, delay = 0 }) {
+  return text.split('').map((ch, i) => (
+    <span key={i} className="kinetic-letter" style={{ animationDelay: `${delay + i * 0.035}s` }}>
+      {ch === ' ' ? ' ' : ch}
+    </span>
+  ));
+}
 
 export default function Home() {
   useScrollReveal();
+  const featuredProjects = FEATURED_IDS
+    .map(id => ALL_PROJECTS.find(project => project.id === id))
+    .filter(Boolean);
 
   return (
     <div className="page-enter">
       {/* ── HERO ──────────────────────────────────────────── */}
       <section id="hero">
+        <div className="aurora" aria-hidden="true" />
         <div className="container">
           <div className="hero-inner">
             <div>
               <p className="hero-sysref">
-                STATUS: <span style={{ color: 'var(--neural-lime)', fontWeight: 600, letterSpacing: '0.16em', textShadow: '0 0 12px rgba(200,240,106,0.45)' }}>OPEN_TO_WORK</span>
+                Status: <span style={{ color: 'var(--neural-lime)', fontWeight: 600, letterSpacing: '0.05em', textShadow: '0 0 12px rgba(76,242,216,0.45)' }}>Open to work</span>
+                {' · '}
+                <span style={{ color: 'var(--electric-cyan)' }}><LiveClock /></span>
               </p>
               <h1 className="hero-title">
-                <span className="lime">KUSHAGRA</span>
-                <span className="lime">SINGH</span>
+                <span className="lime"><KineticText text="KUSHAGRA" /></span>
+                <span className="lime"><KineticText text="SINGH" delay={8 * 0.035} /></span>
               </h1>
               <p className="hero-sub">
-                AI Engineer &amp; Full-Stack Developer with 4 years of experience across
-                e-commerce, pharmacy, and legal-tech — conversational bots, agentic AI,
-                voice AI, and full-stack automation. Architecture, code, deployment: solo.
+                AI Engineer &amp; Full-Stack Developer building production-grade AI systems
+                across commerce, pharmacy, legal-tech, routing, and reliability engineering.
+                I own the path from architecture and evaluation to deployment and operations.
               </p>
               <div className="hero-chips">
                 <span className="chip">Python</span>
@@ -51,34 +77,45 @@ export default function Home() {
             </div>
 
             {/* Terminal */}
-            <div className="terminal-panel">
-              <div className="t-bar">
-                <span className="td r" /><span className="td y" /><span className="td g" />
-                <span className="t-bar-title">kushagra@ai-node:~</span>
-              </div>
-              <div className="t-body">
-                <span className="tl"><span className="tp">kushagra@ai-node</span><span className="tpath">:~$</span> <span className="tcmd">./init_profile.sh</span></span>
-                <span className="tl tcmt"># Loading profile…</span>
-                <span className="tl tout">[INFO] Role    : AI Engineer | Full-Stack Developer</span>
-                <span className="tl tout">[INFO] Status  : Open to Work · Freelancing (True Grit)</span>
-                <span className="tl tout">[INFO] Stack   : Python · FastAPI · React · LangGraph</span>
-                <span className="tl tout">[INFO] Location: Gurugram, India</span>
-                <span className="tl tok">[OK]   True Grit → Cloudflare-native commerce · 5 ML/AI subsystems</span>
-                <span className="tl tok">[OK]   GemPundit → WhatsApp bot · 30+ langs · GPT-5.2</span>
-                <span className="tl tok">[OK]   Pharmdel → support portal · 10K+ tickets · UK &amp; Ireland</span>
-                <span className="tl tok">[OK]   Multi-agent RAG → 92% relevance · sub-3s</span>
-                <span className="tl twarn">[STAT] 4 years experience · 40+ projects shipped</span>
-                <span className="tl twarn">[STAT] 2× National Hackathon Finalist</span>
-                <span className="tl">
-                  <span className="tp">kushagra@ai-node</span>
-                  <span className="tpath">:~$</span>{' '}
-                  <span className="cursor" />
-                </span>
-              </div>
-            </div>
+            <InteractiveTerminal />
           </div>
         </div>
 
+      </section>
+
+      <section className="featured-work-section">
+        <div className="container">
+          <div className="section-heading-row reveal">
+            <div>
+              <p className="label">Selected Engineering Work</p>
+              <h2 className="sec-title">Built Across<br />The Full Stack</h2>
+            </div>
+            <p className="section-heading-copy">
+              A focused set of systems spanning commerce, semantic retrieval,
+              graph routing, and explainable incident investigation.
+            </p>
+          </div>
+          <div className="featured-work-grid">
+            {featuredProjects.map((project, index) => (
+              <Link
+                to={`/projects/${project.id}`}
+                className={`featured-work-card reveal-card ${index === 0 ? 'featured-work-lead' : ''}`}
+                key={project.id}
+              >
+                <div className="featured-work-meta">{project.badge}</div>
+                <h3>{project.name}</h3>
+                <p>{project.tagline}</p>
+                <div className="featured-work-footer">
+                  <span>{project.stack.slice(0, 3).join(' · ')}</span>
+                  <span className="proj-arr">↗</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+          <div className="featured-work-cta reveal">
+            <Link to="/projects" className="btn btn-ghost">Explore all {ALL_PROJECTS.length} projects ↗</Link>
+          </div>
+        </div>
       </section>
 
       {/* ── QUICK LINKS ───────────────────────────────────── */}
@@ -88,50 +125,15 @@ export default function Home() {
           <h2 className="sec-title reveal">
             Explore the<br />Full Profile
           </h2>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: '1px',
-            background: 'var(--outline-variant)',
-          }}>
-            {[
-              { to: '/experience', label: 'Experience', sub: 'GemPundit · Pharmdel · Draft AI · Legal Firm', num: '01' },
-              { to: '/projects', label: 'Projects', sub: '40+ systems built & shipped', num: '02' },
-              { to: '/skills', label: 'Skills', sub: 'Languages, AI/ML, Infra & more', num: '03' },
-              { to: '/education', label: 'Education', sub: 'VIT Bhopal · B.Tech CSE AI/ML', num: '04' },
-              { to: '/about', label: 'About', sub: '2× National Hackathon Finalist', num: '05' },
-              { to: '/contact', label: 'Contact', sub: 'Open to roles & collaboration', num: '06' },
-            ].map(item => (
-              <Link
-                key={item.to}
-                to={item.to}
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  padding: '2rem',
-                  background: 'var(--surface)',
-                  textDecoration: 'none',
-                  color: 'inherit',
-                  transition: 'background 0.2s',
-                  gap: '0.5rem',
-                }}
-                className="reveal-card"
-                onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-elevated)'}
-                onMouseLeave={e => e.currentTarget.style.background = 'var(--surface)'}
-              >
-                <div style={{ fontSize: '0.62rem', letterSpacing: '0.14em', color: 'var(--dim-syntax)' }}>
-                  {item.num}
+          <div className="home-link-grid">
+            {QUICK_LINKS.map(item => (
+              <Link key={item.to} to={item.to} className="qlink-card reveal-card">
+                <div className="qlink-num">{item.num}</div>
+                <div className="qlink-title">
+                  {item.label} <span className="arr">↗</span>
                 </div>
-                <div style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: '1.2rem',
-                  fontWeight: 700,
-                  color: 'var(--data-white)',
-                }}>
-                  {item.label} <span style={{ color: 'var(--neural-lime)' }}>↗</span>
-                </div>
-                <div style={{ fontSize: '0.8rem', color: 'var(--muted-code)' }}>
-                  {item.sub}
+                <div className="qlink-sub">
+                  {item.to === '/projects' ? `${ALL_PROJECTS.length} ${item.sub}` : item.sub}
                 </div>
               </Link>
             ))}

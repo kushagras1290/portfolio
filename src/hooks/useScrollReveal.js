@@ -33,21 +33,21 @@ export function useScrollReveal() {
       });
     });
 
-    const targets = document.querySelectorAll(
+    const revealTargets = document.querySelectorAll(
       '.reveal, .reveal-card, .reveal-left, .reveal-title'
     );
+
     const obs = new IntersectionObserver(
       entries => {
-        entries.forEach(e => {
-          if (e.isIntersecting) {
-            e.target.classList.add('vis');
-            obs.unobserve(e.target);
-          }
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('vis');
+          obs.unobserve(entry.target);
         });
       },
       { threshold: 0.08 }
     );
-    targets.forEach(el => obs.observe(el));
+    revealTargets.forEach(el => obs.observe(el));
     return () => obs.disconnect();
   });
 }

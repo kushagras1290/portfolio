@@ -19,8 +19,8 @@ export default function Experience() {
             Production Systems<br />Shipped &amp; Owned
           </h1>
           <p style={{ fontSize: '0.9rem', lineHeight: 1.75, color: 'var(--on-surface-var)', maxWidth: 620 }}>
-            Full product ownership from architecture through production deployment —
-            no sprint tickets, no hand-holding. Every system below runs on live traffic.
+            End-to-end ownership across conversational AI, retrieval systems, automation,
+            legal-tech, and production web platforms, from architecture to deployment.
           </p>
         </div>
       </div>
