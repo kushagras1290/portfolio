@@ -1,145 +1,133 @@
 import { Link } from 'react-router-dom';
-import { useScrollReveal } from '../hooks/useScrollReveal.js';
-import { ALL_PROJECTS } from '../data/index.js';
-import InteractiveTerminal from '../components/InteractiveTerminal.jsx';
+import HumanoidStory from '../components/HumanoidStory.jsx';
 import LiveClock from '../components/LiveClock.jsx';
+import { ALL_PROJECTS } from '../data/index.js';
 
 const FEATURED_IDS = ['true-grit', 'route-optimizer', 'pharmdel-support', 'aegis-sre'];
 
-const QUICK_LINKS = [
-  { to: '/experience', label: 'Experience', sub: 'GemPundit · Pharmdel · Draft AI · Legal Firm', num: '01' },
-  { to: '/projects', label: 'Projects', sub: 'systems documented in depth', num: '02' },
-  { to: '/skills', label: 'Skills', sub: 'Languages, AI/ML, Infra & more', num: '03' },
-  { to: '/education', label: 'Education', sub: 'VIT Bhopal · B.Tech CSE AI/ML', num: '04' },
-  { to: '/about', label: 'About', sub: '2× National Hackathon Finalist', num: '05' },
-  { to: '/contact', label: 'Contact', sub: 'Open to roles & collaboration', num: '06' },
-];
-
-function KineticText({ text, delay = 0 }) {
-  return text.split('').map((ch, i) => (
-    <span key={i} className="kinetic-letter" style={{ animationDelay: `${delay + i * 0.035}s` }}>
-      {ch === ' ' ? ' ' : ch}
-    </span>
-  ));
-}
-
 export default function Home() {
-  useScrollReveal();
   const featuredProjects = FEATURED_IDS
-    .map(id => ALL_PROJECTS.find(project => project.id === id))
+    .map((id) => ALL_PROJECTS.find((project) => project.id === id))
     .filter(Boolean);
 
-  return (
-    <div className="page-enter">
-      {/* ── HERO ──────────────────────────────────────────── */}
-      <section id="hero">
-        <div className="aurora" aria-hidden="true" />
-        <div className="container">
-          <div className="hero-inner">
-            <div>
-              <p className="hero-sysref">
-                Status: <span style={{ color: 'var(--neural-lime)', fontWeight: 600, letterSpacing: '0.05em', textShadow: '0 0 12px rgba(76,242,216,0.45)' }}>Open to work</span>
-                {' · '}
-                <span style={{ color: 'var(--electric-cyan)' }}><LiveClock /></span>
-              </p>
-              <h1 className="hero-title">
-                <span className="lime"><KineticText text="KUSHAGRA" /></span>
-                <span className="lime"><KineticText text="SINGH" delay={8 * 0.035} /></span>
-              </h1>
-              <p className="hero-sub">
-                AI Engineer &amp; Full-Stack Developer building production-grade AI systems
-                across commerce, pharmacy, legal-tech, routing, and reliability engineering.
-                I own the path from architecture and evaluation to deployment and operations.
-              </p>
-              <div className="hero-chips">
-                <span className="chip">Python</span>
-                <span className="chip">Flask / FastAPI</span>
-                <span className="chip">React.js</span>
-                <span className="chip cyan">LLM Engineering</span>
-                <span className="chip cyan">Agentic AI</span>
-                <span className="chip cyan">Conversational AI</span>
-                <span className="chip amber">Cloudflare</span>
-                <span className="chip">Computer Vision</span>
-                <span className="chip">Prompt Engineering</span>
-              </div>
-              <div className="hero-ctas">
-                <Link to="/projects" className="btn btn-primary">View Projects ↗</Link>
-                <a
-                  href="https://github.com/kushagras1290"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-ghost"
-                >
-                  GitHub ↗
-                </a>
-                <Link to="/contact" className="btn btn-ghost">Get In Touch</Link>
-              </div>
+  const slides = [
+    {
+      id: 'identity',
+      eyebrow: 'AI ENGINEER · FULL-STACK DEVELOPER',
+      railTitle: 'Kushagra Singh',
+      title: 'Kushagra Singh',
+      summary: 'I build production-grade AI systems across commerce, pharmacy, legal technology, routing, and reliability engineering, owning the path from architecture and evaluation to deployment and operations.',
+      stats: ['Open to work', '4 years across AI and full-stack delivery', 'Based in Gurugram, India'],
+      tags: ['Python', 'FastAPI', 'React', 'LLM Engineering', 'Agentic AI', 'Cloudflare'],
+      tone: '#7ddbd2',
+      chapter: 'Human Potential',
+      footer: <>AVAILABLE · <LiveClock /></>,
+      primaryAction: { to: '/projects', label: 'View projects' },
+      secondaryAction: { to: '/about', label: 'About me' },
+    },
+    {
+      id: 'full-stack',
+      eyebrow: 'SELECTED ENGINEERING WORK',
+      railTitle: 'Built Across the Full Stack',
+      title: 'Built Across the Full Stack',
+      summary: 'A focused set of systems spanning commerce, semantic retrieval, graph routing, and explainable incident investigation.',
+      stats: featuredProjects.map((project) => project.name),
+      tags: ['Cloudflare', 'Graph Routing', 'Semantic Retrieval', 'SRE', 'React', 'FastAPI'],
+      tone: '#9aaeff',
+      chapter: 'Systems Shipped',
+      footer: `${featuredProjects.length} FEATURED SYSTEMS`,
+      primaryAction: { to: '/projects', label: 'Explore all work' },
+      detailIntro: 'Four representative systems from the complete portfolio.',
+      detailContent: (
+        <div className="hm-detail-highlights">
+          {featuredProjects.map((project) => (
+            <div key={project.id}>
+              <Link to={`/projects/${project.id}`}><strong>{project.name}</strong> ↗</Link>
+              <p>{project.tagline}</p>
             </div>
-
-            {/* Terminal */}
-            <InteractiveTerminal />
-          </div>
+          ))}
         </div>
+      ),
+    },
+    {
+      id: 'experience',
+      eyebrow: 'PRODUCTION OWNERSHIP',
+      title: 'Experience',
+      summary: 'GemPundit, Pharmdel, Draft AI, and legal-document intelligence, presented company by company with the systems delivered in each role.',
+      stats: ['GemPundit', 'Pharmdel', 'Draft AI', 'Legal Firm'],
+      tags: ['Conversational AI', 'Automation', 'Retrieval', 'Legal Tech'],
+      tone: '#e8b178',
+      chapter: 'Experience',
+      footer: 'EMPLOYMENT TIMELINE',
+      primaryAction: { to: '/experience', label: 'Open experience' },
+      secondaryAction: { to: '/experience', label: 'View timeline' },
+    },
+    {
+      id: 'projects',
+      eyebrow: 'COMPLETE BUILD CATALOG',
+      title: 'Projects',
+      summary: `${ALL_PROJECTS.length} documented builds across professional, independent, client, hobby, and academic work, each with technical evidence and implementation context.`,
+      stats: ['Professional systems', 'Independent and client work', 'Academic and hobby builds'],
+      tags: ['AI Systems', 'Full Stack', 'Infrastructure', 'Optimization', 'Computer Vision'],
+      tone: '#80d7a7',
+      chapter: 'Projects',
+      footer: `${ALL_PROJECTS.length} DOCUMENTED BUILDS`,
+      primaryAction: { to: '/projects', label: 'Browse projects' },
+      secondaryAction: { to: '/projects', label: 'Open catalog' },
+    },
+    {
+      id: 'skills',
+      eyebrow: 'TECHNICAL ARSENAL',
+      title: 'Skills',
+      summary: 'Languages, frameworks, AI and machine learning, infrastructure, and data-science capabilities organized by the systems they enable.',
+      stats: ['Core languages', 'Frameworks and APIs', 'AI / ML / LLM', 'Platforms and infrastructure'],
+      tags: ['Python', 'JavaScript', 'LangGraph', 'Cloudflare', 'PostgreSQL', 'PyTorch'],
+      tone: '#ed9fcb',
+      chapter: 'Skills',
+      footer: 'ENGINEERING CAPABILITIES',
+      primaryAction: { to: '/skills', label: 'Explore skills' },
+      secondaryAction: { to: '/skills', label: 'Open skills' },
+    },
+    {
+      id: 'education',
+      eyebrow: 'ACADEMIC FOUNDATION',
+      title: 'Education',
+      summary: 'B.Tech in Computer Science and Engineering with an AI and ML specialization from VIT Bhopal, supported by focused technical certifications.',
+      stats: ['B.Tech CSE · AI / ML', 'VIT Bhopal · 8.11 CGPA', 'Technical certifications'],
+      tags: ['AI / ML', 'Computer Science', 'Deep Learning', 'Data Analysis'],
+      tone: '#82c7ef',
+      chapter: 'Education',
+      footer: 'ACADEMIC RECORD',
+      primaryAction: { to: '/education', label: 'View education' },
+      secondaryAction: { to: '/education', label: 'Open record' },
+    },
+    {
+      id: 'about',
+      eyebrow: 'BEYOND THE CODE',
+      title: 'About',
+      summary: 'Four years across AI engineering, full-stack systems, freelance delivery, technical competitions, and production ownership in multiple business domains.',
+      stats: ['2× national hackathon finalist', 'Regional Mathematics Olympiad', 'AI engineering and independent practice'],
+      tags: ['Systems Thinking', 'Product Ownership', 'Communication', 'Research'],
+      tone: '#d5b07e',
+      chapter: 'About',
+      footer: 'BACKGROUND AND RECOGNITION',
+      primaryAction: { to: '/about', label: 'Read my story' },
+      secondaryAction: { to: '/about', label: 'Open profile' },
+    },
+    {
+      id: 'contact',
+      eyebrow: 'OPEN TO ROLES AND COLLABORATION',
+      title: 'Let’s Build Something Real',
+      summary: 'I work best on ambitious problems that require deep technical execution, production responsibility, and clear product thinking.',
+      stats: ['AI engineering roles', 'High-impact freelance work', 'Product collaborations'],
+      tags: ['Gurugram', 'Remote', 'AI Systems', 'Full Stack'],
+      tone: '#7ddbd2',
+      chapter: 'Contact',
+      footer: 'START A CONVERSATION',
+      primaryAction: { to: '/contact', label: 'Get in touch' },
+      secondaryAction: { to: '/contact', label: 'Contact me' },
+    },
+  ];
 
-      </section>
-
-      <section className="featured-work-section">
-        <div className="container">
-          <div className="section-heading-row reveal">
-            <div>
-              <p className="label">Selected Engineering Work</p>
-              <h2 className="sec-title">Built Across<br />The Full Stack</h2>
-            </div>
-            <p className="section-heading-copy">
-              A focused set of systems spanning commerce, semantic retrieval,
-              graph routing, and explainable incident investigation.
-            </p>
-          </div>
-          <div className="featured-work-grid">
-            {featuredProjects.map((project, index) => (
-              <Link
-                to={`/projects/${project.id}`}
-                className={`featured-work-card reveal-card ${index === 0 ? 'featured-work-lead' : ''}`}
-                key={project.id}
-              >
-                <div className="featured-work-meta">{project.badge}</div>
-                <h3>{project.name}</h3>
-                <p>{project.tagline}</p>
-                <div className="featured-work-footer">
-                  <span>{project.stack.slice(0, 3).join(' · ')}</span>
-                  <span className="proj-arr">↗</span>
-                </div>
-              </Link>
-            ))}
-          </div>
-          <div className="featured-work-cta reveal">
-            <Link to="/projects" className="btn btn-ghost">Explore all {ALL_PROJECTS.length} projects ↗</Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ── QUICK LINKS ───────────────────────────────────── */}
-      <section style={{ background: 'var(--deep-charcoal)', paddingTop: '0' }}>
-        <div className="container" style={{ paddingTop: 'var(--sy)' }}>
-          <p className="label reveal">Navigate</p>
-          <h2 className="sec-title reveal">
-            Explore the<br />Full Profile
-          </h2>
-          <div className="home-link-grid">
-            {QUICK_LINKS.map(item => (
-              <Link key={item.to} to={item.to} className="qlink-card reveal-card">
-                <div className="qlink-num">{item.num}</div>
-                <div className="qlink-title">
-                  {item.label} <span className="arr">↗</span>
-                </div>
-                <div className="qlink-sub">
-                  {item.to === '/projects' ? `${ALL_PROJECTS.length} ${item.sub}` : item.sub}
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-    </div>
-  );
+  return <HumanoidStory slides={slides} railLabel="Explore the Profile" pageLabel="Home · Human → Machine" />;
 }

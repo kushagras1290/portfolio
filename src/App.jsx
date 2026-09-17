@@ -111,17 +111,28 @@ export default function App() {
   useGlobalInteractions();
   return (
     <BrowserRouter>
+      <AppShell />
+    </BrowserRouter>
+  );
+}
+
+function AppShell() {
+  const { pathname } = useLocation();
+  const isAdmin = pathname === '/admin';
+
+  return (
+    <>
       <ThemeInit />
       <ScrollToTop />
       <KeyboardNav />
-      <EasterEgg />
-      <ShortcutsHelp />
-      <div className="grain-overlay" aria-hidden="true" />
-      <CursorAura />
-      <ScrollProgressBar />
+      {isAdmin && <EasterEgg />}
+      {isAdmin && <ShortcutsHelp />}
+      {isAdmin && <div className="grain-overlay" aria-hidden="true" />}
+      {isAdmin && <CursorAura />}
+      {isAdmin && <ScrollProgressBar />}
       <ToastHost />
-      <BackToTop />
-      <Nav />
+      {isAdmin && <BackToTop />}
+      {isAdmin && <Nav />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/experience" element={<Experience />} />
@@ -140,7 +151,7 @@ export default function App() {
         />
         <Route path="*" element={<NotFound />} />
       </Routes>
-      <Footer />
-    </BrowserRouter>
+      {isAdmin && <Footer />}
+    </>
   );
 }

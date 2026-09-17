@@ -1,123 +1,75 @@
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useScrollReveal } from '../hooks/useScrollReveal.js';
+import HumanoidStory from '../components/HumanoidStory.jsx';
 import { SKILLS } from '../data/index.js';
 
-const PILL_CLASS = { lime: '', cyan: 'c', amber: 'a' };
-
-const TAB_LABELS = {
+const CATEGORY_LABELS = {
   lang: 'Languages',
   fw: 'Frameworks & APIs',
   ai: 'AI / ML / LLM',
-  infra: 'Platforms & Infra',
+  infra: 'Platforms & Infrastructure',
   ds: 'Data Science',
 };
 
 export default function Skills() {
-  const [active, setActive] = useState('lang');
   const [query, setQuery] = useState('');
-  useScrollReveal();
-
-  const current = SKILLS[active];
   const normalizedQuery = query.trim().toLowerCase();
+  const searchResults = useMemo(() => (
+    Object.entries(SKILLS).flatMap(([key, category]) => (
+      category.groups.flatMap((group) => group.pills
+        .filter((pill) => !normalizedQuery || pill.toLowerCase().includes(normalizedQuery))
+        .map((pill) => ({ pill, category: CATEGORY_LABELS[key] })))
+    ))
+  ), [normalizedQuery]);
 
-  const searchResults = useMemo(() => {
-    if (!normalizedQuery) return null;
-    return Object.values(SKILLS).flatMap(category =>
-      category.groups.flatMap(group =>
-        group.pills
-          .filter(pill => pill.toLowerCase().includes(normalizedQuery))
-          .map(pill => ({ pill, color: group.color, category: category.title }))
-      )
-    );
-  }, [normalizedQuery]);
-
-  return (
-    <div className="page-enter">
-      <div className="page-header">
-        <div className="container">
-          <div className="breadcrumb">
-            <Link to="/">Home</Link>
-            <span className="breadcrumb-sep">/</span>
-            <span>Skills</span>
+  const introSlide = {
+    id: 'skills-index',
+    eyebrow: 'TECHNICAL ARSENAL',
+    railTitle: 'What I Build With',
+    title: 'What I Build With',
+    summary: 'Capabilities are grouped by the systems they enable. Search the complete skill set or scroll through each engineering layer.',
+    tone: '#7ddbd2',
+    chapter: 'Technical Arsenal',
+    footer: `${searchResults.length} ${normalizedQuery ? 'MATCHING' : 'DOCUMENTED'} SKILLS`,
+    details: searchResults.map((result) => `<strong>${result.pill}</strong> · ${result.category}`),
+    content: (
+      <>
+        <label className="hm-catalog-search">
+          <span>Search every category</span>
+          <input
+            type="search"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Framework, platform, or capability"
+          />
+        </label>
+        {normalizedQuery && (
+          <div className="hm-search-results">
+            {searchResults.slice(0, 6).map((result) => (
+              <span key={`${result.category}-${result.pill}`}>{result.pill}</span>
+            ))}
           </div>
-          <p className="label">Technical Arsenal</p>
-          <h1 className="sec-title">
-            What I<br />Build With
-          </h1>
-        </div>
-      </div>
+        )}
+      </>
+    ),
+  };
 
-      <section style={{ background: 'var(--deep-charcoal)' }}>
-        <div className="container">
-          <div className="project-search-row" style={{ marginBottom: '2rem', marginTop: 0 }}>
-            <label className="project-search">
-              <span className="project-search-icon" aria-hidden="true">⌕</span>
-              <span className="sr-only">Search all skills</span>
-              <input
-                type="search"
-                value={query}
-                onChange={e => setQuery(e.target.value)}
-                placeholder="Search all skills across every category…"
-              />
-            </label>
-            {searchResults && (
-              <span className="project-result-count" aria-live="polite">
-                {searchResults.length} result{searchResults.length === 1 ? '' : 's'}
-              </span>
-            )}
-          </div>
+  const categorySlides = Object.entries(SKILLS).map(([key, category], index) => {
+    const pills = category.groups.flatMap((group) => group.pills);
+    return {
+      id: key,
+      eyebrow: CATEGORY_LABELS[key],
+      railTitle: category.title,
+      title: category.title,
+      summary: `${pills.length} documented tools and capabilities in this engineering layer.`,
+      stats: category.groups.map((group) => `${group.pills.length} capabilities · ${group.color}`),
+      tags: pills,
+      tone: ['#9aaeff', '#e8b178', '#80d7a7', '#ed9fcb', '#82c7ef'][index],
+      chapter: CATEGORY_LABELS[key],
+      footer: `${pills.length} SKILLS · ${CATEGORY_LABELS[key].toUpperCase()}`,
+      details: pills,
+      detailIntro: `Complete ${CATEGORY_LABELS[key].toLowerCase()} capability list.`,
+    };
+  });
 
-          {searchResults ? (
-            <div className="skills-body reveal">
-              {searchResults.length === 0 ? (
-                <p style={{ color: 'var(--muted-code)' }}>No matching skills. Try a different term.</p>
-              ) : (
-                <div className="pill-row">
-                  {searchResults.map(r => (
-                    <span
-                      key={`${r.category}-${r.pill}`}
-                      className={`skill-pill ${PILL_CLASS[r.color] || ''}`}
-                      title={r.category}
-                    >
-                      {r.pill}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="skills-wrap reveal">
-              <div className="skills-nav">
-                {Object.entries(TAB_LABELS).map(([key, label]) => (
-                  <button
-                    key={key}
-                    className={`s-btn ${active === key ? 'on' : ''}`}
-                    onClick={() => setActive(key)}
-                  >
-                    {label}
-                  </button>
-                ))}
-              </div>
-              <div className="skills-body">
-                <div className="sg-title">{current.title}</div>
-                {current.groups.map((group, gi) => (
-                  <div className="pill-row" key={gi}>
-                    {group.pills.map(pill => (
-                      <span
-                        key={pill}
-                        className={`skill-pill ${PILL_CLASS[group.color] || ''}`}
-                      >
-                        {pill}
-                      </span>
-                    ))}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      </section>
-    </div>
-  );
+  return <HumanoidStory slides={[introSlide, ...categorySlides]} railLabel="Skill Layers" pageLabel="Skills · Technical Stack" />;
 }

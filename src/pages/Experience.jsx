@@ -1,73 +1,70 @@
 import { Link } from 'react-router-dom';
-import { useScrollReveal } from '../hooks/useScrollReveal.js';
-import { EXPERIENCE } from '../data/index.js';
+import HumanoidStory from '../components/HumanoidStory.jsx';
+import { ALL_PROJECTS, EXPERIENCE } from '../data/index.js';
+
+function projectsForJob(job) {
+  const company = job.company.split(' / ')[0];
+  return ALL_PROJECTS.filter((project) => (
+    project.company === company || project.companies?.includes(company)
+  ));
+}
 
 export default function Experience() {
-  useScrollReveal();
+  const slides = EXPERIENCE.map((job, index) => {
+    const relatedProjects = projectsForJob(job);
+    const details = job.sections.flatMap((section) => [
+      `<strong>${section.title}</strong>`,
+      ...section.bullets,
+    ]);
+    const stack = [...new Set(relatedProjects.flatMap((project) => project.stack))].slice(0, 8);
 
-  return (
-    <div className="page-enter">
-      <div className="page-header">
-        <div className="container">
-          <div className="breadcrumb">
-            <Link to="/">Home</Link>
-            <span className="breadcrumb-sep">/</span>
-            <span>Experience</span>
-          </div>
-          <p className="label">Work Experience</p>
-          <h1 className="sec-title">
-            Production Systems<br />Shipped &amp; Owned
-          </h1>
-          <p style={{ fontSize: '0.9rem', lineHeight: 1.75, color: 'var(--on-surface-var)', maxWidth: 620 }}>
-            End-to-end ownership across conversational AI, retrieval systems, automation,
-            legal-tech, and production web platforms, from architecture to deployment.
-          </p>
-        </div>
-      </div>
-
-      <section style={{ background: 'var(--deep-charcoal)', paddingTop: 'var(--sy)' }}>
-        <div className="container">
-          <div className="exp-grid">
-            {EXPERIENCE.map(job => (
-              <div className="exp-card reveal" key={job.id}>
-                <div className="exp-top">
-                  <div>
-                    <div className="exp-co">
-                      {job.link ? (
-                        <a
-                          href={job.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="exp-co-link"
-                        >
-                          {job.company} <span style={{ color: 'var(--neural-lime)' }}>↗</span>
-                        </a>
-                      ) : (
-                        job.company
-                      )}
-                    </div>
-                    <div className="exp-role">{job.role}</div>
-                  </div>
-                  <div className="exp-when">
-                    <div className="exp-period">{job.period}</div>
-                    <div className="exp-loc">{job.location}</div>
-                  </div>
-                </div>
-                {job.sections.map(sec => (
-                  <div className="exp-sub" key={sec.title}>
-                    <div className="exp-sub-title">{sec.title}</div>
-                    <ul className="bullets">
-                      {sec.bullets.map((b, i) => (
-                        <li key={i} dangerouslySetInnerHTML={{ __html: b }} />
-                      ))}
-                    </ul>
-                  </div>
-                ))}
+    return {
+      id: job.id,
+      eyebrow: job.role,
+      railTitle: job.company,
+      title: job.company,
+      summary: `${job.period} · ${job.location}`,
+      tone: ['#7ddbd2', '#9aaeff', '#e8b178', '#ed9fcb'][index % 4],
+      chapter: job.company.split(' / ')[0],
+      footer: `${job.period} · ${relatedProjects.length} DOCUMENTED SYSTEM${relatedProjects.length === 1 ? '' : 'S'}`,
+      tags: stack,
+      details,
+      detailIntro: `${job.role} · ${job.period} · ${job.location}`,
+      primaryAction: relatedProjects[0]
+        ? { to: `/projects/${relatedProjects[0].id}`, label: 'Open first system' }
+        : { to: '/projects', label: 'View projects' },
+      secondaryAction: { to: '/projects', label: 'All projects' },
+      stats: [
+        `${job.sections.length} workstreams`,
+        `${relatedProjects.length} linked project records`,
+        job.location,
+      ],
+      detailContent: (
+        <>
+          <div className="hm-detail-highlights">
+            {job.sections.map((section) => (
+              <div key={section.title}>
+                <strong>{section.title}</strong>
+                <ul>
+                  {section.bullets.map((bullet, bulletIndex) => (
+                    <li key={bulletIndex} dangerouslySetInnerHTML={{ __html: bullet }} />
+                  ))}
+                </ul>
               </div>
             ))}
           </div>
-        </div>
-      </section>
-    </div>
-  );
+          {relatedProjects.length > 0 && (
+            <div className="hm-detail-projects">
+              <span>Project records</span>
+              {relatedProjects.map((project) => (
+                <Link to={`/projects/${project.id}`} key={project.id}>{project.name} ↗</Link>
+              ))}
+            </div>
+          )}
+        </>
+      ),
+    };
+  });
+
+  return <HumanoidStory slides={slides} railLabel="Work Experience" pageLabel="Experience · Company Timeline" />;
 }

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#090d13" />
+  <meta name="description" content="An original interactive AI engineering portfolio: animated neural intelligence, agent systems, retrieval, vision and infrastructure." />
+  <title>SINKU / AI — The Intelligence Atelier</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+    :root{color-scheme:dark;--white:#f0f5f7;--muted:#a5afc1;--violet:#ae8bff;--cyan:#85e6d9;--line:rgba(166,224,230,.28);--bg:#090d13;--mono:'DM Mono',Consolas,'Courier New',monospace;--sans:'Space Grotesk',Arial,sans-serif}
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--white)}body{font-family:var(--mono);overflow:hidden}button,a,input,textarea{font:inherit}button{color:inherit;cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--cyan);outline-offset:5px}::selection{background:#a18deb;color:#0b0c11}
+    .scene{position:relative;height:100svh;min-height:580px;overflow:hidden;isolation:isolate;background:radial-gradient(ellipse at 24% 96%,#261638 0%,transparent 45%),radial-gradient(ellipse at 79% 77%,#092e30 0%,transparent 39%),linear-gradient(112deg,#101825 0%,#080b11 52%,#0d1317 100%)}
+    .scene::before{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;opacity:.19;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.81' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.33'/%3E%3C/svg%3E")}
+    .scene::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(ellipse at 50% 47%,transparent 17%,rgba(3,6,11,.24) 75%,rgba(3,6,11,.52) 100%)}
+    #world{position:absolute;inset:0;width:100%;height:100%;z-index:0;display:block;pointer-events:none}
+    .light-field{position:absolute;z-index:0;width:55vmax;height:55vmax;top:0;left:35%;border-radius:50%;background:radial-gradient(circle,rgba(64,173,178,.11),transparent 65%);filter:blur(32px);pointer-events:none}
+    .topbar{position:absolute;z-index:20;inset:0 0 auto;display:flex;align-items:flex-start;justify-content:space-between;padding:38px clamp(25px,3.2vw,64px);pointer-events:none}
+    .brand{display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--white);pointer-events:auto}.brand-mark{position:relative;width:33px;height:33px;border:1px solid rgba(187,237,235,.5);border-radius:50%;display:grid;place-items:center;box-shadow:0 0 24px rgba(97,224,216,.09)}.brand-mark::before,.brand-mark::after{content:"";position:absolute;width:21px;height:1px;background:var(--cyan);transform:rotate(45deg)}.brand-mark::after{transform:rotate(-45deg)}.brand-text{font-family:var(--sans);font-weight:700;letter-spacing:-.045em;font-size:18px}.brand-text span{font-weight:400;color:var(--cyan)}.brand-sub{display:block;color:#88959f;font-size:8px;letter-spacing:.23em;margin-top:2px}
+    .nav-wrap{display:flex;align-items:center;gap:19px;pointer-events:auto}.status{color:#a0b9b7;font-size:9px;letter-spacing:.13em;display:flex;align-items:center;gap:8px}.status::before{content:"";width:5px;height:5px;border-radius:100%;background:#9eead3;box-shadow:0 0 12px #9eead3;animation:blink 3s infinite}.nav-pill{display:flex;align-items:center;padding:6px;border:1px solid rgba(176,225,225,.43);border-radius:100px;background:rgba(12,16,23,.55);backdrop-filter:blur(20px);box-shadow:0 0 35px rgba(91,213,204,.065),inset 0 0 14px rgba(80,145,165,.035)}.nav-pill button{border:0;background:transparent;padding:10px 19px;font-size:11px;letter-spacing:.06em;transition:color .2s}.nav-pill button:hover{color:var(--cyan)}.nav-pill i{width:35px;height:1px;background:#a3b5ba;opacity:.65}
+    .index-line{position:absolute;z-index:5;top:110px;right:clamp(29px,3.4vw,66px);display:flex;align-items:center;gap:10px;color:#778c95;font-size:9px;letter-spacing:.17em}.index-line .dash{width:55px;height:1px;background:#567477}.index-line strong{color:#c1d2d5;font-weight:400}
+    .side{position:absolute;z-index:15;left:clamp(30px,3.75vw,72px);bottom:clamp(39px,6vh,76px);width:264px}.eyebrow{font-size:11px;letter-spacing:.09em;color:#e4e9ef;margin:0 0 20px}.filter-list{display:grid;justify-items:start;gap:7px}.filter{position:relative;border:0;background:none;padding:5px 7px 5px 26px;color:#b4a8e7;font-size:12px;letter-spacing:.02em;text-align:left;transition:color .22s,transform .22s}.filter::before{content:'→';position:absolute;left:0;top:4px;color:#8ecac8}.filter:hover,.filter[aria-pressed=true]{color:#f3f1ff;transform:translateX(5px)}.filter[aria-pressed=true]::after{content:"";position:absolute;right:-13px;top:50%;width:5px;height:5px;border-radius:50%;background:var(--cyan);box-shadow:0 0 9px var(--cyan)}.ask{display:block;margin-top:23px;padding:14px 22px;min-width:215px;border:1px solid rgba(166,140,250,.62);border-radius:35px;background:rgba(71,50,115,.08);color:#b19bd7;font-size:11px;text-align:left;letter-spacing:.03em;transition:background .2s,color .2s,box-shadow .2s}.ask:hover{background:rgba(135,104,198,.2);color:#fff;box-shadow:0 0 28px rgba(120,93,211,.12)}
+    .coordinates{position:absolute;z-index:8;bottom:32px;right:clamp(29px,3.4vw,66px);color:#82929b;font-size:9px;letter-spacing:.14em;text-align:right;line-height:2.1}.coordinates span{color:#d3dfe0}
+    .artifacts{position:absolute;inset:0;z-index:1;pointer-events:none}.ring{position:absolute;top:50%;left:53%;width:min(61vw,870px);height:min(61vw,870px);border:1px solid rgba(97,164,173,.09);border-radius:50%;transform:translate(-50%,-50%) rotateX(65deg) rotate(-21deg);box-shadow:0 0 35px rgba(71,164,163,.04)}.ring:nth-child(2){width:min(75vw,1040px);height:min(75vw,1040px);transform:translate(-50%,-50%) rotateX(70deg) rotate(27deg);border-color:rgba(146,95,209,.1)}.glyph{position:absolute;font-size:9px;letter-spacing:.15em;color:#3f6977;opacity:.56}.glyph.one{top:20%;left:31%}.glyph.two{top:74%;right:13%}.glyph.three{top:13%;left:59%}
+    .gallery{position:absolute;inset:0;z-index:7;perspective:1500px;pointer-events:none}.gallery-inner{position:absolute;inset:0;transform-style:preserve-3d;transition:transform 1s cubic-bezier(.18,.75,.15,1)}
+    .project{--accent:#83ded8;--accent-rgb:131,222,216;position:absolute;width:clamp(410px,46vw,760px);height:clamp(295px,51vh,510px);top:49%;left:55%;border-radius:32px;overflow:hidden;transform-style:preserve-3d;border:1px solid rgba(var(--accent-rgb),.55);background:#112029;box-shadow:0 40px 110px rgba(0,0,0,.52),inset 0 0 0 5px rgba(var(--accent-rgb),.045),0 0 26px rgba(var(--accent-rgb),.075);transition:transform 1.12s cubic-bezier(.16,.82,.16,1),opacity .85s,filter .85s,border-color .5s;will-change:transform,opacity;pointer-events:none}
+    .project[data-position="active"]{transform:translate(-50%,-50%) translate3d(0,0,190px) rotateY(-4deg) rotateX(1deg);opacity:1;filter:none;pointer-events:auto;cursor:pointer}
+    .project[data-position="previous"]{transform:translate(-50%,-50%) translate3d(-62vw,-4vh,-140px) rotateY(25deg) rotateZ(-7deg);opacity:.72;filter:brightness(.55) saturate(.8)}
+    .project[data-position="next"]{transform:translate(-50%,-50%) translate3d(48vw,7vh,-220px) rotateY(-29deg) rotateZ(7deg);opacity:.76;filter:brightness(.6) saturate(.82)}
+    .project[data-position="far-previous"]{transform:translate(-50%,-50%) translate3d(-100vw,-13vh,-420px) rotateY(44deg) rotateZ(-15deg);opacity:.3;filter:brightness(.4)}
+    .project[data-position="far-next"]{transform:translate(-50%,-50%) translate3d(88vw,15vh,-470px) rotateY(-43deg) rotateZ(15deg);opacity:.3;filter:brightness(.4)}
+    .project::before{content:"";position:absolute;inset:7px;border:1px solid rgba(var(--accent-rgb),.1);border-radius:25px;z-index:6;pointer-events:none}.project::after{content:"";position:absolute;inset:0;z-index:5;pointer-events:none;background:linear-gradient(135deg,rgba(189,247,241,.075),transparent 36%,rgba(0,0,0,.08) 80%)}
+    .art{position:absolute;inset:0;overflow:hidden;isolation:isolate;background:radial-gradient(ellipse at 70% 53%,rgba(var(--accent-rgb),.23),transparent 46%),linear-gradient(130deg,#13242e 0%,#14232c 39%,#0b1a24 100%)}.art::before{content:"";position:absolute;inset:-20%;background:repeating-linear-gradient(0deg,transparent 0 49px,rgba(var(--accent-rgb),.063) 50px,transparent 51px),repeating-linear-gradient(90deg,transparent 0 49px,rgba(var(--accent-rgb),.063) 50px,transparent 51px);transform:perspective(500px) rotateX(27deg) rotateZ(8deg);mask-image:linear-gradient(to right,transparent,#000 45%,transparent)}
+    .art::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,11,17,.7),transparent 78%),linear-gradient(0deg,rgba(4,9,16,.42),transparent 46%);pointer-events:none}
+    .art-wave,.art-orb,.art-slice,.art-shard{position:absolute;display:block;pointer-events:none}.art-wave{width:83%;height:110%;left:35%;top:-13%;border-radius:42% 58% 49% 51% / 53% 39% 61% 47%;border:1px solid rgba(var(--accent-rgb),.37);background:conic-gradient(from 80deg at 48% 51%,transparent 0deg,rgba(var(--accent-rgb),.07) 70deg,rgba(var(--accent-rgb),.26) 118deg,rgba(136,102,190,.19) 159deg,transparent 220deg,rgba(var(--accent-rgb),.17) 280deg,transparent 360deg);box-shadow:inset 0 0 80px rgba(var(--accent-rgb),.09),0 0 90px rgba(var(--accent-rgb),.07);transform:rotate(36deg);animation:artdrift 16s ease-in-out infinite alternate}.art-orb{width:44%;aspect-ratio:1;left:58%;top:10%;border-radius:50%;background:radial-gradient(circle at 28% 22%,rgba(240,247,255,.48),rgba(var(--accent-rgb),.25) 8%,rgba(15,31,44,.5) 33%,rgba(6,8,15,.9) 64%,rgba(var(--accent-rgb),.41) 70%,transparent 74%);filter:blur(.5px);box-shadow:0 0 110px rgba(var(--accent-rgb),.14);animation:float 8s ease-in-out infinite}.art-slice{width:58%;height:2px;top:63%;right:-13%;background:linear-gradient(90deg,transparent,rgba(var(--accent-rgb),.72),transparent);transform:rotate(-26deg);box-shadow:0 0 15px rgba(var(--accent-rgb),.7)}.art-shard{right:11%;bottom:-15%;width:33%;height:85%;background:linear-gradient(135deg,rgba(var(--accent-rgb),.26),rgba(15,19,38,.13) 49%,rgba(var(--accent-rgb),.35));clip-path:polygon(38% 0,100% 27%,69% 100%,0 68%);transform:rotate(-8deg);filter:blur(2px)}
+    .project[data-art="2"] .art{background:radial-gradient(circle at 78% 40%,#203d47 0,transparent 41%),linear-gradient(120deg,#0d1527,#16152a 69%,#142536)}.project[data-art="2"] .art-wave{border-radius:15%;transform:rotate(28deg) skewY(9deg);background:repeating-linear-gradient(110deg,rgba(103,229,218,.12) 0 3px,transparent 3px 27px),linear-gradient(140deg,transparent,rgba(155,116,235,.27),transparent)}.project[data-art="2"] .art-orb{border-radius:22% 75% 35% 65%;transform:rotate(45deg);background:radial-gradient(ellipse,#2e6170,#101a29 60%,rgba(130,234,218,.45) 65%,transparent 74%)}
+    .project[data-art="3"] .art{background:radial-gradient(ellipse at 64% 54%,#54375c,transparent 48%),linear-gradient(130deg,#191325,#121a2a)}.project[data-art="3"] .art-wave{background:conic-gradient(from 10deg,transparent,#ad6dab66,#f9ba9c55,transparent,#6b76d055,transparent);transform:rotate(-35deg)}.project[data-art="3"] .art-orb{background:radial-gradient(circle at 24% 20%,#f8c6aa99,#63395099 19%,#191324 49%,#eea3af66 68%,transparent 74%)}
+    .project[data-art="4"] .art{background:radial-gradient(circle at 68% 50%,#204b3b,transparent 47%),linear-gradient(130deg,#101f22,#101b19)}.project[data-art="4"] .art-wave{border-radius:16% 86% 22% 67%;background:conic-gradient(from 40deg,transparent,#a2e5b24d,transparent,#68c8ad55,transparent)}.project[data-art="4"] .art-orb{border-radius:45% 55% 70% 30%;background:radial-gradient(circle at 30% 20%,#b1efbd66,#1c4d41 30%,#091a1b 68%,#85e6bd77 72%,transparent 75%)}
+    .project[data-art="5"] .art{background:radial-gradient(circle at 72% 43%,#5a3731,transparent 41%),linear-gradient(125deg,#211619,#181b24)}.project[data-art="5"] .art-wave{border-radius:7%;transform:rotate(-43deg);background:repeating-linear-gradient(75deg,#e3b99d22 0 4px,transparent 5px 24px),linear-gradient(110deg,#e7a18d33,transparent)}.project[data-art="5"] .art-orb{border-radius:28% 68% 31% 74%;background:radial-gradient(circle at 30% 25%,#fbd0aa99,#79534b 26%,#1f1924 65%,#f3b08c66 71%,transparent 76%)}
+    /* The intelligence reactor is original procedural canvas art, not a borrowed model or asset. */
+    .art{background:radial-gradient(ellipse at 72% 49%,rgba(var(--accent-rgb),.2),transparent 43%),linear-gradient(115deg,#111e2b 0%,#09111b 69%,#0a1b23 100%)}
+    .art::before{opacity:.75;transform:perspective(600px) rotateX(24deg) rotateZ(-14deg)}
+    .art::after{z-index:2;background:linear-gradient(90deg,rgba(6,12,20,.83) 0%,rgba(6,12,20,.44) 39%,transparent 66%),linear-gradient(0deg,rgba(3,9,15,.62),transparent 43%)}
+    .neural-visual{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:1;pointer-events:none;filter:contrast(1.09) saturate(1.16)}
+    .core-hud{position:absolute;right:30px;top:30px;bottom:28px;z-index:3;width:39%;display:flex;align-items:flex-end;justify-content:space-between;pointer-events:none;color:rgba(var(--accent-rgb),.8);font-size:8px;letter-spacing:.11em;text-shadow:0 0 9px rgba(var(--accent-rgb),.65)}
+    .core-hud span:first-child{position:absolute;top:35px;right:0;writing-mode:vertical-rl;letter-spacing:.2em;opacity:.75}
+    .core-hud span:last-child{position:absolute;bottom:22px;right:4px;white-space:nowrap}
+    .panel-content{max-width:72%}.panel-title{font-size:clamp(37px,4.25vw,72px);letter-spacing:-.085em}.panel-title span{white-space:nowrap}
+    .project[data-art="1"] .art,.project[data-art="2"] .art,.project[data-art="3"] .art,.project[data-art="4"] .art,.project[data-art="5"] .art{background:radial-gradient(ellipse at 74% 50%,rgba(var(--accent-rgb),.23),transparent 45%),linear-gradient(120deg,#101c29,#0a101d 80%)}
+    .artifacts .glyph{letter-spacing:.19em}.ring{border-style:dashed;opacity:.5}
+    @media(max-width:700px){.core-hud{right:18px;top:17px;bottom:17px}.core-hud span:first-child{display:none}.core-hud span:last-child{bottom:25px;font-size:7px}.panel-content{max-width:78%}.panel-title{font-size:clamp(34px,8.5vw,59px)}}
+    .scanlines{position:absolute;inset:0;z-index:4;pointer-events:none;opacity:.17;background:repeating-linear-gradient(0deg,transparent 0 3px,#02070c 4px 5px)}.panel-number{position:absolute;z-index:7;top:30px;left:36px;font-size:11px;letter-spacing:.18em;color:#c9eded}.panel-number em{font-style:normal;color:rgba(200,235,235,.48)}.panel-cross{position:absolute;right:32px;top:27px;z-index:7;color:rgba(214,250,242,.7);font-size:23px;font-weight:400}.panel-content{position:absolute;z-index:7;left:clamp(32px,5vw,86px);right:26px;top:50%;transform:translateY(-41%);pointer-events:none}.panel-kicker{font-size:10px;letter-spacing:.32em;color:var(--accent);text-shadow:0 0 15px rgba(var(--accent-rgb),.35);margin-bottom:24px}.panel-title{font-family:var(--mono);font-weight:400;font-size:clamp(38px,4.55vw,77px);line-height:.98;letter-spacing:-.09em;text-transform:uppercase;max-width:640px;margin:0;text-shadow:0 3px 24px rgba(0,0,0,.4)}.panel-title span{display:block}.panel-bottom{position:absolute;z-index:7;left:36px;right:36px;bottom:28px;display:flex;align-items:end;justify-content:space-between;gap:15px;color:#c0d4d9}.panel-bottom small{font-size:9px;letter-spacing:.13em;line-height:1.8}.panel-bottom .enter{font-size:10px;color:var(--accent);white-space:nowrap;border-bottom:1px solid rgba(var(--accent-rgb),.5);padding-bottom:6px}.project[data-position="active"]:hover{border-color:rgba(var(--accent-rgb),.9);box-shadow:0 45px 130px rgba(0,0,0,.65),0 0 42px rgba(var(--accent-rgb),.2)}
+    .bottom-nav{position:absolute;z-index:16;bottom:clamp(39px,6vh,76px);left:50%;transform:translateX(-1%);display:flex;align-items:center;gap:15px}.arrow{width:45px;height:45px;border:1px solid rgba(158,207,211,.4);background:rgba(11,18,25,.68);backdrop-filter:blur(20px);border-radius:8px;color:#d8e6ea;font-size:19px;transition:background .2s,border-color .2s,transform .2s}.arrow:hover{background:#1d363a;border-color:var(--cyan);transform:translateY(-2px)}.counter{display:flex;gap:8px;font-size:10px;color:#83949e;letter-spacing:.08em;min-width:87px;justify-content:center}.counter strong{color:#ebf0f1;font-weight:400}.progress{position:absolute;z-index:15;left:50%;bottom:22px;transform:translateX(-50%);display:flex;gap:8px}.progress button{height:2px;width:22px;border:0;padding:0;background:#52626c;transition:width .3s,background .3s}.progress button[aria-current="true"]{background:#b7e4dd;width:53px;box-shadow:0 0 9px #8ec9c4}
+    .vertical-label{position:absolute;z-index:9;right:clamp(28px,3.4vw,67px);top:48%;transform:translateY(-50%);writing-mode:vertical-rl;font-size:9px;letter-spacing:.25em;color:#68818a}
+    .detail{position:fixed;inset:0;z-index:30;display:grid;place-items:center;padding:24px;background:rgba(3,6,10,.79);backdrop-filter:blur(15px);opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}.detail.open{opacity:1;visibility:visible}.detail-card{width:min(560px,100%);max-height:min(770px,90svh);overflow:auto;position:relative;padding:clamp(30px,5vw,58px);border:1px solid rgba(150,225,221,.4);border-radius:22px;background:radial-gradient(circle at 95% 0%,rgba(80,182,178,.15),transparent 44%),#101822;box-shadow:0 40px 120px #0009}.close{position:absolute;right:19px;top:18px;width:38px;height:38px;border:1px solid #50666c;border-radius:50%;background:transparent;font-size:23px}.detail-label{color:#98dbd3;font-size:10px;letter-spacing:.24em}.detail-card h2{font-family:var(--sans);font-weight:500;letter-spacing:-.06em;font-size:clamp(38px,5vw,59px);line-height:1.05;margin:22px 0}.detail-card p{color:#b4c4c9;font-family:var(--sans);line-height:1.7;font-size:15px}.detail-meta{display:flex;flex-wrap:wrap;gap:9px;margin:25px 0}.detail-meta span{border:1px solid #42555a;border-radius:18px;padding:8px 12px;font-size:10px;color:#c3d9d8}.detail-footer{border-top:1px solid #344850;padding-top:24px;color:#829ba3;font-size:10px;line-height:1.7}.form{display:grid;gap:16px;margin-top:22px}.form label{display:grid;gap:8px;color:#a5c8ca;font-size:10px;letter-spacing:.08em}.form input,.form textarea{width:100%;padding:14px;border:1px solid #42575f;border-radius:6px;background:#0a121b;color:#ecf1f2;font-family:var(--sans);font-size:14px}.form textarea{resize:vertical;min-height:98px}.submit{border:1px solid #8adbd1;border-radius:5px;background:#97dcd2;color:#0b191d;padding:15px;font-size:11px;letter-spacing:.1em}.form-response{min-height:19px;color:#bce8cb;font-size:11px;line-height:1.6}.demo-note{color:#82959d!important;font-size:11px!important}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @keyframes float{0%,100%{translate:0 0}50%{translate:0 -16px}}@keyframes artdrift{0%{translate:0 0;rotate:0deg}100%{translate:-14px 11px;rotate:12deg}}@keyframes blink{50%{opacity:.35}}
+    @media(min-width:1850px){.project{left:53%}.bottom-nav{left:51%}}
+    @media(max-width:1050px){.status{display:none}.project{width:clamp(360px,55vw,650px);height:clamp(330px,48vh,480px);left:58%}.project[data-position="previous"]{transform:translate(-50%,-50%) translate3d(-65vw,-8vh,-190px) rotateY(28deg)}.project[data-position="next"]{transform:translate(-50%,-50%) translate3d(52vw,10vh,-240px) rotateY(-29deg)}.side{width:200px}.filter{font-size:11px}.eyebrow{font-size:10px}.ask{min-width:180px}.bottom-nav{left:58%}}
+    @media(max-width:700px){.scene{min-height:600px}.topbar{padding:23px 20px}.brand-text{font-size:15px}.brand-mark{width:28px;height:28px}.brand-sub{font-size:7px}.nav-pill button{font-size:10px;padding:9px 11px}.nav-pill i{width:16px}.index-line{top:95px;right:22px}.vertical-label,.coordinates,.glyph{display:none}.project{left:50%;top:42%;width:min(86vw,510px);height:min(45svh,410px);min-height:285px;border-radius:22px}.project[data-position="active"]{transform:translate(-50%,-50%) translate3d(0,0,150px) rotateY(-2deg)}.project[data-position="previous"]{transform:translate(-50%,-50%) translate3d(-105vw,-6vh,-200px) rotateY(28deg)}.project[data-position="next"]{transform:translate(-50%,-50%) translate3d(95vw,5vh,-220px) rotateY(-28deg)}.project[data-position="far-previous"],.project[data-position="far-next"]{opacity:0}.panel-number{left:23px;top:20px}.panel-cross{right:21px;top:15px}.panel-content{left:32px;right:20px}.panel-kicker{font-size:8px;margin-bottom:15px}.panel-title{font-size:clamp(37px,9vw,66px)}.panel-bottom{left:24px;right:24px;bottom:18px}.panel-bottom small,.panel-bottom .enter{font-size:8px}.side{left:23px;right:23px;bottom:72px;width:auto}.eyebrow{margin-bottom:9px;font-size:9px}.filter-list{display:flex;overflow:auto;gap:7px;padding:0 0 5px;scrollbar-width:thin}.filter{flex:none;font-size:9px;border:1px solid #49455b;border-radius:20px;padding:9px 12px;background:#131220bc}.filter::before,.filter[aria-pressed=true]::after{display:none}.filter[aria-pressed=true]{border-color:#addbd9;background:#24413f;transform:none}.ask{position:absolute;bottom:calc(100% + 20px);left:0;width:auto;min-width:0;margin:0;padding:10px 14px;font-size:9px}.bottom-nav{bottom:20px;left:auto;right:23px;transform:none;gap:8px}.arrow{height:36px;width:36px}.counter{min-width:56px;font-size:9px}.progress{bottom:30px;left:23px;transform:none}.progress button{width:12px}.progress button[aria-current="true"]{width:27px}}
+    @media(max-width:390px){.brand-sub{display:none}.nav-wrap{gap:0}.nav-pill button{padding:8px}.project{top:41%;height:300px}.panel-title{font-size:37px}.panel-bottom .enter{display:none}.side{bottom:69px}.ask{bottom:calc(100% + 12px)}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition-duration:.01ms!important;scroll-behavior:auto!important}.project{will-change:auto}}
+  </style>
+</head>
+<body>
+  <main class="scene" id="scene">
+    <canvas id="world" aria-hidden="true"></canvas>
+    <div class="light-field" aria-hidden="true"></div>
+    <div class="artifacts" aria-hidden="true"><div class="ring"></div><div class="ring"></div><span class="glyph one">MODEL.STATE // ACTIVE</span><span class="glyph two">INFERENCE / LIVE</span><span class="glyph three">VECTOR SPACE / 4096D</span></div>
+    <header class="topbar">
+      <a href="#home" class="brand" id="homeLink" aria-label="Sinku AI, back to featured work"><span class="brand-mark" aria-hidden="true"></span><span><span class="brand-text">SINKU<span> / </span>AI</span><span class="brand-sub">ENGINEERING INTELLIGENCE</span></span></a>
+      <nav class="nav-wrap" aria-label="Primary navigation"><span class="status">NEURAL ENGINE ONLINE</span><div class="nav-pill"><button type="button" id="workBtn">WORK</button><i aria-hidden="true"></i><button type="button" id="contactBtn">CONTACT</button></div></nav>
+    </header>
+    <div class="index-line" aria-hidden="true">SELECTED SYSTEMS <span class="dash"></span> <strong>2026</strong></div>
+    <section class="gallery" aria-label="Selected projects" aria-roledescription="carousel"><div class="gallery-inner" id="galleryInner"></div></section>
+    <aside class="side" aria-label="Project filters"><p class="eyebrow">EXPLORE THE STACK</p><div class="filter-list" id="filters"></div><button type="button" class="ask" id="askBtn">LET’S BUILD SOMETHING ↗</button></aside>
+    <div class="vertical-label" aria-hidden="true">THE FUTURE IS ENGINEERED&nbsp; / &nbsp;001—005</div>
+    <div class="bottom-nav" aria-label="Project navigation"><button type="button" class="arrow" id="prev" aria-label="Previous project">‹</button><span class="counter" aria-live="polite"><strong id="currentCount">01</strong> / <span id="totalCount">05</span></span><button type="button" class="arrow" id="next" aria-label="Next project">›</button></div>
+    <div class="progress" id="progress" aria-label="Choose a project"></div>
+    <div class="coordinates" aria-hidden="true">NEURAL ATLAS <span>© 2026</span><br>SCROLL / NAVIGATE / INSPECT</div>
+    <p class="sr-only" id="announcer" aria-live="polite"></p>
+  </main>
+  <div class="detail" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="detail-card"><button type="button" class="close" id="closeModal" aria-label="Close dialog">×</button><div id="modalBody"></div></div>
+  </div>
+  <script>
+    (() => {
+      'use strict';
+      // Original portfolio demo. Project descriptions are clearly marked as concepts, not work claims.
+      const projects = [
+        {name:'AGENT FABRIC',lines:['AGENT','FABRIC'],type:'MULTI-AGENT SYSTEMS',category:'AI AGENTS',year:'2026',client:'ORCHESTRATION / TOOL USE',description:'Concept showcase: a coordinated agent runtime with typed tools, explicit approval gates, traceable decisions and recovery paths. Replace this description with a verified project case study.',tags:['Python','LangGraph','Tool calling','Guardrails'],color:'#83ded8',rgb:'131,222,216'},
+        {name:'KNOWLEDGE ENGINE',lines:['KNOWLEDGE','ENGINE'],type:'RAG / SEMANTIC SEARCH',category:'RAG / SEARCH',year:'2026',client:'GROUND ANSWERS IN EVIDENCE',description:'Concept showcase: hybrid retrieval, reranking, citation-aware generation and an evaluation harness for grounded answers. Replace with your own tested metrics and architecture.',tags:['Embeddings','Hybrid search','Reranking','RAG evals'],color:'#a8a0fb',rgb:'168,160,251'},
+        {name:'VISION FORGE',lines:['VISION','FORGE'],type:'COMPUTER VISION',category:'COMPUTER VISION',year:'2026',client:'FROM PIXELS TO SIGNAL',description:'Concept showcase: a visual intelligence pipeline for ingestion, preprocessing, inference, quality control and human review. This is a design demonstration, not a claim of deployment.',tags:['PyTorch','OpenCV','Inference','Human review'],color:'#eda8c0',rgb:'237,168,192'},
+        {name:'VOICE LOOP',lines:['VOICE','LOOP'],type:'REAL-TIME AI',category:'REAL-TIME AI',year:'2026',client:'LATENCY IS A FEATURE',description:'Concept showcase: low-latency voice interaction, streaming transcription, turn-taking, interruption handling and observable session state. Add links only after verifying your actual project.',tags:['WebRTC','Streaming','Tool use','Observability'],color:'#a4e8c0',rgb:'164,232,192'},
+        {name:'MODEL OPS',lines:['MODEL','OPS'],type:'AI INFRASTRUCTURE',category:'MLOPS',year:'2026',client:'BUILD / EVALUATE / SHIP',description:'Concept showcase: model deployment architecture with offline evaluation, monitored releases, latency budgets and rollback mechanisms. Replace sample text with documented work.',tags:['FastAPI','CI/CD','Tracing','Evals'],color:'#f0b49b',rgb:'240,180,155'}
+      ];
+      const $ = id => document.getElementById(id);
+      const gallery = $('galleryInner'), filters = $('filters'), progress = $('progress');
+      const modal = $('modal'), body = $('modalBody');
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+      let active = 0, selectedCategory = 'ALL', previousFocus = null, wheelLocked = false, startX = null;
+      const escapeHTML = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+      const cardMarkup = (p, i) => `<article class="project" data-index="${i}" data-art="${i+1}" data-position="far-next" style="--accent:${p.color};--accent-rgb:${p.rgb}" role="group" aria-label="${escapeHTML(p.name)}, ${escapeHTML(p.type)}"><div class="art" aria-hidden="true"><canvas class="neural-visual" data-neural="${i}" aria-hidden="true"></canvas><div class="core-hud"><span>INTELLIGENCE / ${String(i+1).padStart(2,'0')}</span><span>● LIVE SIGNAL</span></div></div><div class="scanlines" aria-hidden="true"></div><span class="panel-number">PROJECT ${String(i+1).padStart(2,'0')} <em>/ ${p.year}</em></span><span class="panel-cross" aria-hidden="true">⌖</span><div class="panel-content"><div class="panel-kicker">[ ${escapeHTML(p.type)} ]</div><h1 class="panel-title">${p.lines.map(escapeHTML).map(line=>`<span>${line}</span>`).join('')}</h1></div><div class="panel-bottom"><small>${escapeHTML(p.client)}<br>© SINKU / AI</small><span class="enter">EXPLORE PROJECT ↗</span></div></article>`;
+      gallery.innerHTML = projects.map(cardMarkup).join('');
+      const cards = [...gallery.querySelectorAll('.project')];
+      const categories = ['ALL','AI AGENTS','RAG / SEARCH','COMPUTER VISION','REAL-TIME AI','MLOPS'];
+      filters.innerHTML = categories.slice(1).map(c => `<button type="button" class="filter" data-category="${escapeHTML(c)}" aria-pressed="false">${escapeHTML(c)}</button>`).join('');
+      progress.innerHTML = projects.map((p,i)=>`<button type="button" data-index="${i}" aria-label="Show ${escapeHTML(p.name)}" aria-current="false"></button>`).join('');
+      const wrap = value => (value + projects.length) % projects.length;
+      function render() {
+        cards.forEach((card,i)=>{
+          const dist = (i-active+projects.length)%projects.length;
+          const position = dist === 0 ? 'active' : dist === 1 ? 'next' : dist === projects.length-1 ? 'previous' : dist === 2 ? 'far-next' : 'far-previous';
+          card.dataset.position=position;card.style.zIndex=position==='active'?'5':position==='next'||position==='previous'?'3':'1';
+          card.setAttribute('aria-hidden',position==='active'?'false':'true');card.tabIndex=position==='active'?0:-1;
+        });
+        $('currentCount').textContent=String(active+1).padStart(2,'0');
+        [...progress.children].forEach((b,i)=>b.setAttribute('aria-current',i===active?'true':'false'));
+        [...filters.children].forEach(b=>b.setAttribute('aria-pressed',String(projects[active].category===b.dataset.category)));
+        $('announcer').textContent=`Project ${active+1} of ${projects.length}: ${projects[active].name}`;
+      }
+      function go(index){active=wrap(index);render()}
+      function next(){go(active+1)} function prev(){go(active-1)}
+      function openModal(kind){
+        previousFocus=document.activeElement;
+        if(kind==='contact'){
+          body.innerHTML=`<div class="detail-label">// OPEN A CONVERSATION</div><h2 id="modalTitle">LET'S MAKE<br>SOMETHING REAL.</h2><p>An interactive contact-form demonstration. The interface works locally; no server is connected.</p><form id="contactForm" class="form"><label>YOUR NAME<input name="name" autocomplete="name" maxlength="90" placeholder="Your name" required></label><label>YOUR EMAIL<input type="email" name="email" autocomplete="email" maxlength="254" placeholder="you@example.com" required></label><label>TELL US ABOUT IT<textarea name="message" maxlength="2000" placeholder="A little about your idea…" required></textarea></label><button type="submit" class="submit">PREVIEW SUBMISSION ↗</button><p id="formResponse" role="status" class="form-response"></p></form><p class="demo-note">Prototype only — submitting does not send or store your message.</p>`;
+          $('contactForm').addEventListener('submit',e=>{e.preventDefault();if(e.currentTarget.reportValidity())$('formResponse').textContent='Form validated. This is a demo; connect a secure backend to send your message.'});
+        } else {
+          const p=projects[active];
+          body.innerHTML=`<div class="detail-label">// SELECTED EXPERIMENT ${String(active+1).padStart(2,'0')} / ${p.year}</div><h2 id="modalTitle">${escapeHTML(p.name)}</h2><p>${escapeHTML(p.description)}</p><div class="detail-meta">${p.tags.map(t=>`<span>${escapeHTML(t)}</span>`).join('')}</div><div class="detail-footer">${escapeHTML(p.type)}<br><br>Portfolio concept only. Replace the sample copy with verified work, links and metrics.</div>`;
+        }
+        modal.classList.add('open');modal.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';$('closeModal').focus();
+      }
+      function closeModal(){modal.classList.remove('open');modal.setAttribute('aria-hidden','true');document.body.style.overflow='';if(previousFocus&&previousFocus.isConnected)previousFocus.focus()}
+      $('prev').addEventListener('click',prev);$('next').addEventListener('click',next);
+      progress.addEventListener('click',e=>{const button=e.target.closest('button[data-index]');if(button)go(Number(button.dataset.index))});
+      filters.addEventListener('click',e=>{const b=e.target.closest('button[data-category]');if(!b)return;selectedCategory=b.dataset.category;const idx=projects.findIndex(p=>p.category===selectedCategory);if(idx>=0)go(idx)});
+      cards.forEach(card=>{card.addEventListener('click',()=>{if(Number(card.dataset.index)===active)openModal('project')});card.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&Number(card.dataset.index)===active){e.preventDefault();openModal('project')}})});
+      $('contactBtn').addEventListener('click',()=>openModal('contact'));$('askBtn').addEventListener('click',()=>openModal('contact'));$('workBtn').addEventListener('click',()=>{closeModal();go(0)});$('homeLink').addEventListener('click',e=>{e.preventDefault();closeModal();go(0)});
+      $('closeModal').addEventListener('click',closeModal);modal.addEventListener('pointerdown',e=>{if(e.target===modal)closeModal()});
+      document.addEventListener('keydown',e=>{
+        if(modal.classList.contains('open')){
+          if(e.key==='Escape'){e.preventDefault();closeModal();return}
+          if(e.key==='Tab'){const focusable=[...modal.querySelectorAll('button:not([disabled]),input,textarea')];const first=focusable[0],last=focusable[focusable.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}return;
+        }
+        if(e.target.closest('input,textarea'))return;
+        if(e.key==='ArrowRight'){e.preventDefault();next()}else if(e.key==='ArrowLeft'){e.preventDefault();prev()}else if(e.key==='Escape'){closeModal()}
+      });
+      $('scene').addEventListener('wheel',e=>{if(modal.classList.contains('open')||Math.abs(e.deltaY)<14||e.target.closest('.filter-list'))return;e.preventDefault();if(wheelLocked)return;wheelLocked=true;e.deltaY>0?next():prev();setTimeout(()=>{wheelLocked=false},750)},{passive:false});
+      $('scene').addEventListener('touchstart',e=>{startX=e.touches[0]?.clientX??null},{passive:true});
+      $('scene').addEventListener('touchend',e=>{if(startX===null||modal.classList.contains('open'))return;const dx=(e.changedTouches[0]?.clientX??startX)-startX;if(Math.abs(dx)>55)dx<0?next():prev();startX=null},{passive:true});
+      render();
+      // Lightweight procedural background: 2D canvas, no WebGL/CDN dependency.
+      const canvas=$('world'),ctx=canvas.getContext('2d',{alpha:true});
+      if(!ctx)return;
+      let w=0,h=0,dpr=1,frame=0,raf=0,visible=true;
+      const dots=[];const random=(min,max)=>min+Math.random()*(max-min);
+      for(let i=0;i<340;i++)dots.push({x:Math.random(),y:Math.random(),r:random(.45,2.5),depth:random(.3,1.5),phase:random(0,Math.PI*2),hue:[175,190,256,286,327,24][Math.floor(Math.random()*6)]});
+      const mouse={x:0,y:0,targetX:0,targetY:0};
+      function resize(){dpr=Math.min(window.devicePixelRatio||1,2);w=window.innerWidth;h=window.innerHeight;canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);canvas.style.width=w+'px';canvas.style.height=h+'px';ctx.setTransform(dpr,0,0,dpr,0,0)}
+      function strokePath(points,color,width,blur=0){ctx.beginPath();points.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.strokeStyle=color;ctx.lineWidth=width;ctx.shadowBlur=blur;ctx.shadowColor=color;ctx.stroke();ctx.shadowBlur=0}
+      // Deterministic Fibonacci-sphere geometry; rotation, parallax, graph edges and
+      // moving inference packets are drawn without external assets or libraries.
+      const neuralNodes=Array.from({length:176},(_,i)=>{
+        const y=1-(i/(175))*2, ring=Math.sqrt(Math.max(0,1-y*y));
+        const theta=i*2.399963229728653;
+        return {x:Math.cos(theta)*ring,y,z:Math.sin(theta)*ring,id:i};
+      });
+      const neuralEdges=[];
+      for(let i=0;i<neuralNodes.length;i++){
+        const nearest=[];
+        for(let j=0;j<neuralNodes.length;j++){
+          if(i===j)continue;
+          const a=neuralNodes[i],b=neuralNodes[j];
+          const d=(a.x-b.x)**2+(a.y-b.y)**2+(a.z-b.z)**2;
+          if(d<.24)nearest.push({j,d});
+        }
+        nearest.sort((a,b)=>a.d-b.d);
+        for(const item of nearest.slice(0,3))if(item.j>i)neuralEdges.push([i,item.j]);
+      }
+      function drawNeuralAtlas(c,cx,cy,r,time,rgb,ambient=false){
+        if(!r||r<12)return;
+        c.save();c.translate(cx,cy);
+        const pulse=Math.sin(time*.85)*.045;
+        const rotation=time*.37+mouse.x*.16, tilt=.22+mouse.y*.17;
+        const cosY=Math.cos(rotation),sinY=Math.sin(rotation);
+        const cosX=Math.cos(tilt),sinX=Math.sin(tilt);
+        const projected=neuralNodes.map(n=>{
+          const x=n.x*cosY+n.z*sinY, z=n.z*cosY-n.x*sinY;
+          const y=n.y*cosX-z*sinX,depth=n.y*sinX+z*cosX;
+          const perspective=1+depth*.12;
+          return {x:x*r*.77*perspective,y:y*r*.77*perspective,z:depth,light:(depth+1)*.5};
+        });
+        const aura=c.createRadialGradient(0,0,r*.04,0,0,r*1.12);
+        aura.addColorStop(0,`rgba(${rgb},.11)`);aura.addColorStop(.39,`rgba(${rgb},.045)`);aura.addColorStop(1,`rgba(${rgb},0)`);
+        c.fillStyle=aura;c.beginPath();c.arc(0,0,r*1.13,0,Math.PI*2);c.fill();
+        // Elliptical gyroscopes and their travelling telemetry pulses.
+        for(let k=0;k<3;k++){
+          c.save();c.rotate((k-1)*.75+time*(k%2?.06:-.04));
+          c.beginPath();c.ellipse(0,0,r*(1.01+k*.07),r*(.34+k*.11),-.32,0,Math.PI*2);
+          c.strokeStyle=`rgba(${rgb},${ambient?.105:.21})`;c.lineWidth=ambient?1:1.1;c.stroke();
+          c.beginPath();c.ellipse(0,0,r*(1.01+k*.07),r*(.34+k*.11),-.32,time*(.2+k*.07),time*(.2+k*.07)+.36);
+          c.strokeStyle=`rgba(${rgb},${ambient?.34:.61})`;c.lineWidth=ambient?1.4:2;c.shadowBlur=10;c.shadowColor=`rgba(${rgb},.7)`;c.stroke();c.shadowBlur=0;
+          c.restore();
+        }
+        // Render links back-to-front to create a genuinely volumetric network.
+        for(const [a,b] of neuralEdges){
+          const p=projected[a],q=projected[b],light=Math.max(.12,(p.light+q.light)*.5);
+          c.beginPath();c.moveTo(p.x,p.y);c.lineTo(q.x,q.y);
+          c.strokeStyle=`rgba(${rgb},${(ambient?.085:.15)*light})`;
+          c.lineWidth=(ambient?.75:1)*(.6+light*.42);c.stroke();
+        }
+        const shell=c.createRadialGradient(-r*.22,-r*.21,r*.08,0,0,r*.82);
+        shell.addColorStop(0,'rgba(20,47,56,.32)');shell.addColorStop(.6,'rgba(3,9,17,.12)');shell.addColorStop(1,'rgba(3,9,17,0)');
+        c.fillStyle=shell;c.beginPath();c.arc(0,0,r*.71,0,Math.PI*2);c.fill();
+        for(const p of [...projected].sort((a,b)=>a.z-b.z)){
+          const size=(ambient?1.5:2.05)*(.62+p.light*.98);
+          c.beginPath();c.arc(p.x,p.y,size,0,Math.PI*2);
+          c.fillStyle=`rgba(${rgb},${(ambient?.16:.3)+p.light*(ambient?.37:.60)})`;
+          if(p.z>.18){c.shadowColor=`rgba(${rgb},.9)`;c.shadowBlur=ambient?5:9}
+          c.fill();c.shadowBlur=0;
+        }
+        // Active synaptic transmissions move across graph edges, rather than flicker randomly.
+        const n=ambient?17:23;
+        for(let i=0;i<n;i++){
+          const edge=neuralEdges[(i*31+11)%neuralEdges.length];
+          const a=projected[edge[0]],b=projected[edge[1]];
+          const phase=(time*(.25+i%4*.09)+i*.137)%1;
+          const x=a.x+(b.x-a.x)*phase,y=a.y+(b.y-a.y)*phase;
+          c.beginPath();c.arc(x,y,ambient?1.6:2.2,0,Math.PI*2);
+          c.fillStyle=`rgba(222,255,248,${ambient?.3:.75})`;
+          c.shadowBlur=13;c.shadowColor=`rgba(${rgb},1)`;c.fill();c.shadowBlur=0;
+        }
+        // A central inference singularity, containment rings and radial tick marks.
+        const center=c.createRadialGradient(-r*.045,-r*.06,1,0,0,r*.20);
+        center.addColorStop(0,'rgba(234,255,249,.87)');center.addColorStop(.07,`rgba(${rgb},.7)`);
+        center.addColorStop(.24,'rgba(15,48,59,.76)');center.addColorStop(.48,'rgba(4,11,23,.91)');center.addColorStop(.72,`rgba(${rgb},.24)`);center.addColorStop(1,'rgba(3,11,21,0)');
+        c.fillStyle=center;c.beginPath();c.arc(0,0,r*(.16+pulse),0,Math.PI*2);c.fill();
+        for(let k=0;k<2;k++){
+          c.beginPath();c.arc(0,0,r*(.12+k*.10),0,Math.PI*2);
+          c.strokeStyle=`rgba(${rgb},${ambient?.12:.29})`;c.lineWidth=.8;c.stroke();
+        }
+        if(!ambient){
+          c.textAlign='center';c.font=`${Math.max(8,r*.025)}px ${getComputedStyle(document.body).fontFamily}`;
+          c.fillStyle=`rgba(${rgb},.57)`;
+          c.fillText('NEURAL / 001',0,-r*.93);
+          c.fillText('INFERENCE ACTIVE',0,r*.96);
+          for(let i=0;i<48;i++){
+            const a=i*Math.PI/24+time*.035,outer=r*1.12,inner=outer-(i%4?3:9);
+            c.beginPath();c.moveTo(Math.cos(a)*inner,Math.sin(a)*inner);c.lineTo(Math.cos(a)*outer,Math.sin(a)*outer);
+            c.strokeStyle=`rgba(${rgb},${i%4?.12:.36})`;c.lineWidth=.9;c.stroke();
+          }
+        }
+        c.restore();
+      }
+      const neuralCanvases=cards.map(card=>card.querySelector('.neural-visual'));
+      function sizeNeuralCanvas(canvas){
+        const rect=canvas.getBoundingClientRect();
+        // CSS-transformed rectangles are not the intrinsic backing-store size.
+        const width=canvas.clientWidth||600,height=canvas.clientHeight||420;
+        const ratio=Math.min(window.devicePixelRatio||1,1.5);
+        const pw=Math.round(width*ratio),ph=Math.round(height*ratio);
+        if(canvas.width!==pw||canvas.height!==ph){canvas.width=pw;canvas.height=ph;}
+        const c=canvas.getContext('2d');if(!c)return null;
+        c.setTransform(ratio,0,0,ratio,0,0);
+        return {c,width,height};
+      }
+      function renderCardCore(index,time){
+        const canvas=neuralCanvases[index];if(!canvas)return;
+        const dims=sizeNeuralCanvas(canvas);if(!dims)return;
+        const {c,width,height}=dims;
+        c.clearRect(0,0,width,height);
+        drawNeuralAtlas(c,width*.735,height*.49,Math.min(width*.36,height*.63),time,projects[index].rgb);
+        c.save();c.strokeStyle=`rgba(${projects[index].rgb},.15)`;c.lineWidth=1;
+        c.beginPath();c.moveTo(width*.57,height*.15);c.lineTo(width*.57,height*.85);c.moveTo(width*.85,height*.15);c.lineTo(width*.85,height*.85);c.stroke();c.restore();
+      }
+      function draw(){if(!visible)return;frame++;ctx.clearRect(0,0,w,h);const t=reduced.matches?0:frame*.006;const cx=w*.53+mouse.x*10,cy=h*.47+mouse.y*8;
+        // A volumetric, rotating AI neural atlas replaces the previous spine/helix.
+        drawNeuralAtlas(ctx,cx,cy,Math.min(w*.29,h*.50,445),t,'131,222,216',true);
+        renderCardCore(active,t);
+        // Atmospheric bokeh: parallax and subtle vertical drift.
+        for(const p of dots){const x=p.x*w+mouse.x*p.depth*12+Math.sin(t*.6+p.phase)*p.depth*5;const y=p.y*h+mouse.y*p.depth*9+Math.cos(t*.8+p.phase)*p.depth*8;const r=p.r*p.depth*(w<700?.65:1);const alpha=.13+(.12+.16*Math.sin(t+p.phase)**2)*p.depth;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fillStyle=`hsla(${p.hue},68%,73%,${Math.min(alpha,.65)})`;ctx.fill()}
+        // Two clouds of micro-fragments framing the project panels.
+        for(let cloud=0;cloud<2;cloud++){
+          const bx=(cloud===0?.77:.33)*w,by=(cloud===0?.3:.81)*h;
+          for(let i=0;i<145;i++){
+            const a=i*2.39996+cloud*1.8,dist=Math.sqrt(i/145)*(cloud===0?Math.min(w*.15,220):Math.min(w*.18,290));
+            const x=bx+Math.cos(a+t*.08)*dist+mouse.x*(cloud?12:22),y=by+Math.sin(a+t*.06)*dist*.77+mouse.y*13;
+            const sz=((i*19)%7+1)*.34*(w<700?.5:1);ctx.fillStyle=`hsla(${(i*29+cloud*95)%120+175},62%,${42+i%35}%,${.065+(i%6)*.033})`;ctx.beginPath();ctx.arc(x,y,sz,0,Math.PI*2);ctx.fill();
+          }
+        }
+        if(!reduced.matches)raf=requestAnimationFrame(draw);
+      }
+      function start(){cancelAnimationFrame(raf);if(visible){neuralCanvases.forEach((_,i)=>renderCardCore(i,reduced.matches?0:frame*.006));draw()}}
+      document.addEventListener('visibilitychange',()=>{visible=!document.hidden;if(visible)start();else cancelAnimationFrame(raf)});
+      window.addEventListener('resize',()=>{resize();start()},{passive:true});
+      window.addEventListener('pointermove',e=>{mouse.targetX=(e.clientX/window.innerWidth-.5)*2;mouse.targetY=(e.clientY/window.innerHeight-.5)*2;mouse.x+=(mouse.targetX-mouse.x)*.2;mouse.y+=(mouse.targetY-mouse.y)*.2;if(reduced.matches)start()},{passive:true});
+      reduced.addEventListener?.('change',start);resize();start();
+    })();
+  </script>
+</body>
+</html>

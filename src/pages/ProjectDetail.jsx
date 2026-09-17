@@ -1,5 +1,5 @@
-import { useParams, Link } from 'react-router-dom';
-import { useScrollReveal } from '../hooks/useScrollReveal.js';
+import { Link, useParams } from 'react-router-dom';
+import HumanoidStory from '../components/HumanoidStory.jsx';
 import { ALL_PROJECTS } from '../data/index.js';
 import { showToast } from '../lib/toast.js';
 
@@ -14,175 +14,106 @@ async function copyProjectLink() {
 
 function getCategoryLabel(project) {
   if (project.category) return project.category;
-  const { badge } = project;
-  if (badge.includes('FREELANCE')) return 'freelance';
-  if (badge.includes('COLLEGE')) return 'college';
-  if (badge.includes('INDEPENDENT')) return 'independent';
+  if (project.badge.includes('FREELANCE')) return 'freelance';
+  if (project.badge.includes('COLLEGE')) return 'college';
+  if (project.badge.includes('INDEPENDENT')) return 'independent';
   return 'professional';
 }
 
 export default function ProjectDetail() {
   const { slug } = useParams();
-  useScrollReveal();
-
-  const idx = ALL_PROJECTS.findIndex(p => p.id === slug);
-  const project = ALL_PROJECTS[idx];
+  const projectIndex = ALL_PROJECTS.findIndex((project) => project.id === slug);
+  const project = ALL_PROJECTS[projectIndex];
 
   if (!project) {
     return (
-      <div className="page-enter" style={{ paddingTop: '120px', minHeight: '60vh' }}>
-        <div className="container" style={{ textAlign: 'center', paddingTop: '4rem' }}>
-          <p style={{ color: 'var(--muted-code)', marginBottom: '1.5rem' }}>Project not found.</p>
-          <Link to="/projects" className="btn btn-ghost">← Back to Projects</Link>
-        </div>
-      </div>
+      <HumanoidStory
+        railLabel="Project"
+        pageLabel="Project Not Found"
+        slides={[{
+          id: 'not-found', eyebrow: '404', title: 'Project Not Found',
+          summary: 'This project record does not exist or has moved.',
+          stats: ['Return to the complete project catalog'],
+          secondaryAction: { to: '/projects', label: 'Back to projects' },
+        }]}
+      />
     );
   }
 
-  const prevProject = idx > 0 ? ALL_PROJECTS[idx - 1] : null;
-  const nextProject = idx < ALL_PROJECTS.length - 1 ? ALL_PROJECTS[idx + 1] : null;
+  const previousProject = projectIndex > 0 ? ALL_PROJECTS[projectIndex - 1] : null;
+  const nextProject = projectIndex < ALL_PROJECTS.length - 1 ? ALL_PROJECTS[projectIndex + 1] : null;
   const category = getCategoryLabel(project);
+  const commonPrimary = project.link
+    ? { href: project.link, label: 'Visit live project' }
+    : { to: '/projects', label: 'All projects' };
 
-  return (
-    <div className="page-enter">
-      {/* ── HERO ─────────────────────────────────────────── */}
-      <div className="proj-detail-hero">
-        <div className="container">
-          <div className="breadcrumb">
-            <Link to="/">Home</Link>
-            <span className="breadcrumb-sep">/</span>
-            <Link to="/projects">Projects</Link>
-            <span className="breadcrumb-sep">/</span>
-            <span style={{
-              textTransform: 'none',
-              color: 'var(--on-surface-var)',
-              letterSpacing: '0.04em',
-              fontSize: '0.72rem',
-            }}>
-              {project.name}
-            </span>
+  const slides = [
+    {
+      id: 'overview',
+      eyebrow: project.badge,
+      railTitle: 'Overview',
+      title: project.name,
+      summary: project.tagline,
+      stats: [category, project.status || 'Documented project', `${project.highlights.length} technical highlights`],
+      tags: project.stack,
+      tone: '#7ddbd2',
+      chapter: 'Project Overview',
+      footer: `${project.badge} · ${category.toUpperCase()}`,
+      primaryAction: commonPrimary,
+      secondaryAction: { to: '/projects', label: 'Back to catalog' },
+      detailIntro: project.desc,
+      details: [project.desc],
+    },
+    {
+      id: 'highlights',
+      eyebrow: 'TECHNICAL EVIDENCE',
+      railTitle: 'Key Highlights',
+      title: 'How the System Works',
+      summary: project.desc,
+      stats: project.highlights.slice(0, 3),
+      tags: project.stack,
+      tone: '#9aaeff',
+      chapter: 'Technical Build',
+      footer: `${project.highlights.length} DOCUMENTED DETAILS`,
+      primaryAction: commonPrimary,
+      secondaryAction: { to: '/projects', label: 'All projects' },
+      detailIntro: `Complete technical record for ${project.name}.`,
+      details: project.highlights,
+    },
+    {
+      id: 'evidence-navigation',
+      eyebrow: 'EVIDENCE & NAVIGATION',
+      railTitle: 'Evidence and Next Project',
+      title: project.evidence ? 'Evidence and Current Status' : 'Continue Exploring',
+      summary: project.evidence || project.status || 'Move through the adjacent project records or return to the full catalog.',
+      tone: '#e8b178',
+      chapter: 'Continue Exploring',
+      footer: `PROJECT ${String(projectIndex + 1).padStart(2, '0')} OF ${String(ALL_PROJECTS.length).padStart(2, '0')}`,
+      content: (
+        <>
+          <div className="hm-custom-grid">
+            {previousProject && (
+              <Link className="hm-custom-block" to={`/projects/${previousProject.id}`}>
+                <span className="hm-custom-label">Previous</span>
+                <strong>{previousProject.name}</strong>
+              </Link>
+            )}
+            {nextProject && (
+              <Link className="hm-custom-block" to={`/projects/${nextProject.id}`}>
+                <span className="hm-custom-label">Next</span>
+                <strong>{nextProject.name}</strong>
+              </Link>
+            )}
           </div>
-
-          <div className="proj-detail-meta">
-            <span className="proj-detail-badge">{project.badge}</span>
-            <span className="proj-detail-num">{project.num}</span>
+          <div className="hm-custom-actions">
+            <Link to="/projects">All projects</Link>
+            <button type="button" onClick={copyProjectLink}>Copy project link</button>
           </div>
+        </>
+      ),
+      secondaryAction: { to: '/projects', label: 'Back to catalog' },
+    },
+  ];
 
-          <h1 className="proj-detail-title">{project.name}</h1>
-          <p className="proj-detail-tagline">{project.tagline}</p>
-
-          <div className="proj-detail-stack">
-            {project.stack.map(s => (
-              <span className="chip muted" key={s}>{s}</span>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* ── BODY ─────────────────────────────────────────── */}
-      <div className="proj-detail-body">
-        <div className="container">
-          <div className="proj-detail-grid">
-            {/* Main content */}
-            <div>
-              <div className="proj-detail-section-label">Overview</div>
-              <p className="proj-detail-overview">{project.desc}</p>
-
-              <div className="proj-detail-section-label">Key Highlights</div>
-              <ul className="proj-highlights">
-                {project.highlights.map((h, i) => (
-                  <li key={i}>{h}</li>
-                ))}
-              </ul>
-
-              {project.evidence && (
-                <div className="project-evidence-note">
-                  <div className="proj-detail-section-label">Evidence Note</div>
-                  <p>{project.evidence}</p>
-                </div>
-              )}
-            </div>
-
-            {/* Sidebar */}
-            <div className="proj-detail-sidebar reveal">
-              {project.link && (
-                <>
-                  <div className="proj-detail-sidebar-label">Live Link</div>
-                  <a
-                    href={project.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-ghost"
-                    style={{ display: 'inline-flex', marginBottom: '2rem' }}
-                  >
-                    Visit Site ↗
-                  </a>
-                </>
-              )}
-              <div className="proj-detail-sidebar-label">Tech Stack</div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem', marginBottom: '2rem' }}>
-                {project.stack.map(s => (
-                  <span className="skill-pill" key={s}>{s}</span>
-                ))}
-              </div>
-
-              <div className="proj-detail-sidebar-label">Category</div>
-              <p style={{ fontSize: '0.85rem', color: 'var(--on-surface-var)', marginBottom: '2rem', textTransform: 'capitalize' }}>
-                {category}
-              </p>
-
-              {project.status && (
-                <>
-                  <div className="proj-detail-sidebar-label">Current Status</div>
-                  <p className="project-status-copy">{project.status}</p>
-                </>
-              )}
-
-              <div className="proj-detail-sidebar-label">Highlights Count</div>
-              <p style={{ fontSize: '0.85rem', color: 'var(--on-surface-var)', marginBottom: '2rem' }}>
-                {project.highlights.length} technical details documented
-              </p>
-
-              <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
-                <Link to="/projects" className="btn-back">← Back to Projects</Link>
-                <button type="button" className="btn-back" onClick={copyProjectLink}>
-                  ⧉ Copy Link
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ── PROJECT NAVIGATION ───────────────────────────── */}
-      <div className="proj-nav-strip">
-        {prevProject ? (
-          <Link to={`/projects/${prevProject.id}`} className="proj-nav-item">
-            <span className="proj-nav-dir">← Previous</span>
-            <span className="proj-nav-name">{prevProject.name}</span>
-          </Link>
-        ) : (
-          <div className="proj-nav-item" style={{ opacity: 0.3, cursor: 'default' }}>
-            <span className="proj-nav-dir">← Previous</span>
-            <span className="proj-nav-name">First project</span>
-          </div>
-        )}
-        <Link to="/projects" className="proj-nav-item" style={{ textAlign: 'center', alignItems: 'center' }}>
-          <span className="proj-nav-dir">All Projects</span>
-          <span className="proj-nav-name">← Back to grid</span>
-        </Link>
-        {nextProject ? (
-          <Link to={`/projects/${nextProject.id}`} className="proj-nav-item" style={{ textAlign: 'right', alignItems: 'flex-end' }}>
-            <span className="proj-nav-dir">Next →</span>
-            <span className="proj-nav-name">{nextProject.name}</span>
-          </Link>
-        ) : (
-          <div className="proj-nav-item" style={{ opacity: 0.3, cursor: 'default', textAlign: 'right', alignItems: 'flex-end' }}>
-            <span className="proj-nav-dir">Next →</span>
-            <span className="proj-nav-name">Last project</span>
-          </div>
-        )}
-      </div>
-    </div>
-  );
+  return <HumanoidStory slides={slides} railLabel={project.name} pageLabel="Project Case Study" />;
 }
