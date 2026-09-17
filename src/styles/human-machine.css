@@ -1235,9 +1235,38 @@
 .hm-scroll-note::before { content: ''; display: block; width: 1px; height: 18px; margin: 0 auto 10px; background: linear-gradient(180deg, rgba(255,255,255,.55), transparent); }
 .hm-scroll-note span { display: block; margin-top: 5px; font-size: 15px; text-align: center; }
 
+/* Decoupled scroll surface — the only scroller on the page. The document itself never
+   scrolls; this fixed overlay does, which keeps native momentum, scrollbar and wheel
+   behaviour while freeing the cinematic layers from document flow. Its position:fixed
+   children (header, banner, stage) stay pinned to the viewport and are not clipped. */
+.hm-scroll-surface {
+  position: fixed;
+  z-index: 10;
+  inset: 0;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  overscroll-behavior-y: contain;
+  scroll-behavior: auto;
+}
+
+/* Sticky stage. The pinned layers live in here rather than being fixed to the viewport
+   directly, because a position:fixed element's containing block is the viewport, which
+   takes it out of the surface's scroll chain — wheeling over a card would then do nothing.
+   The transform makes this wrapper the containing block for its fixed children, so they
+   pin exactly as before while still chaining their wheel events into the surface. The
+   negative margin keeps it out of the scroll length it would otherwise add. */
+.hm-sticky-stage {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  height: 100vh;
+  margin-bottom: -100vh;
+  transform: translateZ(0);
+}
+
 .hm-scroll-story { position: relative; z-index: 10; }
 .hm-story-lead { height: 230vh; }
-.hm-story-step { position: relative; display: grid; min-height: 165vh; place-items: center; }
+.hm-story-step { position: relative; display: grid; min-height: 132vh; place-items: center; }
 .hm-story-step > div { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .hm-story-tail { height: 35vh; }
 

@@ -14,6 +14,40 @@ const ROUTES = [
 
 const DEFAULT_TONES = ['#7ddbd2', '#9aaeff', '#e8b178', '#80d7a7', '#ed9fcb'];
 
+/* Composed chapter score. Chapter lengths are deliberately unequal: a long establishing
+   beat, tight middle beats with a breath every fourth, and a long terminal hold so the
+   transformation completes while the final chapter is on screen. Uniform steps read as a
+   conveyor belt; this reads as pacing. Values are viewport heights. */
+const STEP_RHYTHM = {
+  establishing: 210,
+  breath: 172,
+  standard: 132,
+  terminal: 226,
+};
+
+function getStepHeight(index, total) {
+  if (index === 0) return STEP_RHYTHM.establishing;
+  if (index === total - 1) return STEP_RHYTHM.terminal;
+  return (index + 1) % 4 === 0 ? STEP_RHYTHM.breath : STEP_RHYTHM.standard;
+}
+
+/* Keyboard paging for the decoupled scroll surface: a scrollable div only answers arrow
+   and page keys while focused, so drive it explicitly and keep the page operable. */
+const KEY_SCROLL_STEP = 132;
+
+function isTypingTarget(target) {
+  return Boolean(target?.closest?.('input, textarea, select, [contenteditable="true"], button, a'));
+}
+
+/* Slide ids become visible URLs once chapters are deep-linkable, so they get slugged
+   rather than exposing internal ids like "catalog-professional-". */
+function toChapterSlug(id) {
+  return String(id)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
 const CAROUSEL_FRAMES = {
   farPrevious: { x: -2.5, y: 146, z: -460, rotateY: 3, rotateX: -22, rotateZ: -3, scale: .72, opacity: .06 },
   previous: { x: -1.2, y: 72, z: -190, rotateY: 2, rotateX: -9, rotateZ: -1.5, scale: .92, opacity: .36 },
@@ -443,6 +477,8 @@ function Scene({ persona }) {
 }
 
 /* EFFECT: scroll-unfolding neural graph with live signal packets */
+const TRANSFER_DURATION = 1350;
+
 function NeuralLinkField({ nodeRefs, activeIndex, nodeCount, tone, motionActive }) {
   const canvasRef = useRef(null);
   const previousIndexRef = useRef(activeIndex);
@@ -462,7 +498,7 @@ function NeuralLinkField({ nodeRefs, activeIndex, nodeCount, tone, motionActive 
     let width = 0;
     let height = 0;
     let dpr = 1;
-    let settleTimer;
+    let frameId = null;
 
     if (fieldRef.current.length === 0) {
       const fract = (value) => value - Math.floor(value);
@@ -581,7 +617,7 @@ function NeuralLinkField({ nodeRefs, activeIndex, nodeCount, tone, motionActive 
       const start = points[originIndex];
       const end = points[activeIndex];
       if (!start || !end) return;
-      const progress = Math.min(1, Math.max(0, (time - transitionStartedAt) / 1350));
+      const progress = Math.min(1, Math.max(0, (time - transitionStartedAt) / TRANSFER_DURATION));
       if (progress >= 1) return;
       const control = curveFor(start, end, activeIndex + originIndex + 23);
       const dx = end.x - start.x;
@@ -676,18 +712,34 @@ function NeuralLinkField({ nodeRefs, activeIndex, nodeCount, tone, motionActive 
       drawNeuralTransfer(points, time);
     };
 
+    /* Bounded rAF loop: the transfer burst and edge packets animate for the length of the
+       transition, then the canvas holds its last frame. No permanent loop, so this costs
+       nothing while the reader is still. */
+    const loop = (time) => {
+      render(time);
+      if (document.hidden || time - transitionStartedAt >= TRANSFER_DURATION + 140) {
+        frameId = null;
+        return;
+      }
+      frameId = window.requestAnimationFrame(loop);
+    };
+
     const observer = new ResizeObserver(() => {
       resize();
-      render(0);
+      render(performance.now());
     });
     observer.observe(canvas);
     resize();
-    render(0);
-    settleTimer = window.setTimeout(() => render(performance.now()), 1140);
+
+    if (reducedMotion) {
+      render(0);
+    } else {
+      frameId = window.requestAnimationFrame(loop);
+    }
 
     return () => {
       observer.disconnect();
-      window.clearTimeout(settleTimer);
+      if (frameId !== null) window.cancelAnimationFrame(frameId);
     };
   }, [activeIndex, motionActive, nodeCount, nodeRefs, tone]);
 
@@ -938,6 +990,8 @@ export default function HumanoidStory({
   const [menuOpen, setMenuOpen] = useState(false);
   const [motionActive, setMotionActive] = useState(false);
   const experienceRef = useRef(null);
+  const scrollSurfaceRef = useRef(null);
+  const centersDirtyRef = useRef(true);
   const stepRefs = useRef([]);
   const neuralNodeRefs = useRef([]);
   const closeButtonRef = useRef(null);
@@ -954,17 +1008,42 @@ export default function HumanoidStory({
   const routeLabel = ROUTES.find((route) => route.to === pathname)?.label || 'Home';
   activeIndexRef.current = activeIndex;
 
+  const scrollToStep = (index, behavior = 'smooth') => {
+    const surface = scrollSurfaceRef.current;
+    const step = stepRefs.current[index];
+    if (!surface || !step) return;
+    const target = step.offsetTop + step.offsetHeight / 2 - surface.clientHeight / 2;
+    surface.scrollTo({ top: Math.max(0, target), behavior });
+  };
+
   useEffect(() => {
+    const surface = scrollSurfaceRef.current;
     setActiveIndex(0);
     activeIndexRef.current = 0;
     carouselTargetRef.current = 0;
     carouselCurrentRef.current = 0;
     stepCentersRef.current = [];
+    centersDirtyRef.current = true;
     setDepthPhase('banner');
     setDetailOpen(false);
     setMotionActive(false);
     motionActiveRef.current = false;
-    window.scrollTo(0, 0);
+    if (!surface) return;
+
+    /* Deep link: a chapter hash drops the reader straight into that chapter. */
+    const requestedId = toChapterSlug(decodeURIComponent(window.location.hash.slice(1)));
+    const requestedIndex = requestedId
+      ? normalizedSlides.findIndex((slide) => toChapterSlug(slide.id) === requestedId)
+      : -1;
+    if (requestedIndex > 0) {
+      window.requestAnimationFrame(() => {
+        carouselTargetRef.current = requestedIndex;
+        carouselCurrentRef.current = requestedIndex;
+        scrollToStep(requestedIndex, 'instant');
+      });
+      return;
+    }
+    surface.scrollTop = 0;
   }, [slideKey]);
 
   useEffect(() => {
@@ -1053,13 +1132,16 @@ export default function HumanoidStory({
 
   useEffect(() => {
     const experience = experienceRef.current;
-    if (!experience || normalizedSlides.length === 0) return undefined;
+    const surface = scrollSurfaceRef.current;
+    if (!experience || !surface || normalizedSlides.length === 0) return undefined;
     let ticking = false;
 
     const update = () => {
-      const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-      const progress = Math.min(1, Math.max(0, window.scrollY / maxScroll));
-      const viewportJourney = window.scrollY / Math.max(1, window.innerHeight);
+      const viewport = Math.max(1, surface.clientHeight);
+      const scrollTop = surface.scrollTop;
+      const maxScroll = Math.max(1, surface.scrollHeight - surface.clientHeight);
+      const progress = Math.min(1, Math.max(0, scrollTop / maxScroll));
+      const viewportJourney = scrollTop / viewport;
       const bannerExit = Math.min(1, Math.max(0, (viewportJourney - 0.08) / 0.72));
       const humanArrival = Math.min(1, Math.max(0, (viewportJourney - 0.28) / 0.82));
       const neuralArrival = Math.min(1, Math.max(0, (viewportJourney - 1.04) / 0.88));
@@ -1098,14 +1180,15 @@ export default function HumanoidStory({
           : 'neural';
       setDepthPhase((current) => (current === nextDepthPhase ? current : nextDepthPhase));
 
-      if (stepCentersRef.current.length !== normalizedSlides.length) {
+      if (centersDirtyRef.current || stepCentersRef.current.length !== normalizedSlides.length) {
         stepCentersRef.current = stepRefs.current.map((step) => (
           step ? step.offsetTop + step.offsetHeight / 2 : 0
         ));
+        centersDirtyRef.current = false;
       }
 
       const centers = stepCentersRef.current;
-      const scrollCenter = window.scrollY + window.innerHeight / 2;
+      const scrollCenter = scrollTop + viewport / 2;
       let carouselTarget = 0;
       if (centers.length > 1 && scrollCenter > centers[0]) {
         carouselTarget = centers.length - 1;
@@ -1133,32 +1216,83 @@ export default function HumanoidStory({
       experience.style.setProperty('--hm-mouse-y', ((event.clientY / window.innerHeight - 0.5) * 2).toFixed(4));
     };
 
-    update();
-    window.addEventListener('scroll', requestUpdate, { passive: true });
-    const onResize = () => {
-      stepCentersRef.current = [];
+    /* Chapter centres shift whenever layout does — late fonts, images decoding, a resized
+       panel. Invalidate on all of them, not just on chapter count. */
+    const invalidateCenters = () => {
+      centersDirtyRef.current = true;
       requestUpdate();
     };
-    window.addEventListener('resize', onResize);
+
+    const onKeyDown = (event) => {
+      if (event.metaKey || event.ctrlKey || event.altKey) return;
+      if (isTypingTarget(event.target)) return;
+      if (document.querySelector('.hm-detail-panel')) return;
+      const page = surface.clientHeight * 0.9;
+      const jump = {
+        PageDown: page,
+        PageUp: -page,
+        ArrowDown: KEY_SCROLL_STEP,
+        ArrowUp: -KEY_SCROLL_STEP,
+        ' ': event.shiftKey ? -page : page,
+      }[event.key];
+      if (jump !== undefined) {
+        event.preventDefault();
+        surface.scrollBy({ top: jump, behavior: 'smooth' });
+        return;
+      }
+      if (event.key === 'Home' || event.key === 'End') {
+        event.preventDefault();
+        surface.scrollTo({ top: event.key === 'Home' ? 0 : surface.scrollHeight, behavior: 'smooth' });
+      }
+    };
+
+    update();
+    surface.addEventListener('scroll', requestUpdate, { passive: true });
+    window.addEventListener('resize', invalidateCenters);
+    window.addEventListener('load', invalidateCenters);
+    window.addEventListener('keydown', onKeyDown);
     window.addEventListener('pointermove', onPointerMove, { passive: true });
+    document.fonts?.ready.then(invalidateCenters).catch(() => {});
+    const storyObserver = new ResizeObserver(invalidateCenters);
+    const story = surface.querySelector('.hm-scroll-story');
+    if (story) storyObserver.observe(story);
+
     return () => {
-      window.removeEventListener('scroll', requestUpdate);
-      window.removeEventListener('resize', onResize);
+      surface.removeEventListener('scroll', requestUpdate);
+      window.removeEventListener('resize', invalidateCenters);
+      window.removeEventListener('load', invalidateCenters);
+      window.removeEventListener('keydown', onKeyDown);
       window.removeEventListener('pointermove', onPointerMove);
+      storyObserver.disconnect();
     };
   }, [normalizedSlides.length]);
 
+  /* Chapter in the URL: shareable, bookmarkable, and restored on reload. replaceState
+     keeps the back button pointing at real navigation rather than at every chapter. */
+  useEffect(() => {
+    if (depthPhase !== 'neural' || motionActive) return;
+    const slide = normalizedSlides[activeIndex];
+    if (!slide) return;
+    const slug = toChapterSlug(slide.id);
+    if (!slug) return;
+    const hash = `#${slug}`;
+    if (window.location.hash !== hash) {
+      window.history.replaceState(null, '', `${pathname}${window.location.search}${hash}`);
+    }
+  }, [activeIndex, depthPhase, motionActive, normalizedSlides, pathname]);
+
   useEffect(() => {
     if (!detailOpen) return undefined;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+    const surface = scrollSurfaceRef.current;
+    const previousOverflow = surface ? surface.style.overflowY : '';
+    if (surface) surface.style.overflowY = 'hidden';
     closeButtonRef.current?.focus();
     const closeOnEscape = (event) => {
       if (event.key === 'Escape') setDetailOpen(false);
     };
     window.addEventListener('keydown', closeOnEscape);
     return () => {
-      document.body.style.overflow = previousOverflow;
+      if (surface) surface.style.overflowY = previousOverflow;
       window.removeEventListener('keydown', closeOnEscape);
       returnFocusRef.current?.focus();
     };
@@ -1168,10 +1302,7 @@ export default function HumanoidStory({
     carouselTargetRef.current = index;
     startCarouselMotionRef.current();
     setMenuOpen(false);
-    stepRefs.current[index]?.scrollIntoView({
-      behavior: 'instant',
-      block: 'center',
-    });
+    scrollToStep(index, 'instant');
   };
 
   const openDetails = (event) => {
@@ -1197,8 +1328,10 @@ export default function HumanoidStory({
   };
 
   const enterNeuralField = () => {
-    window.scrollTo({
-      top: window.innerHeight * 1.82,
+    const surface = scrollSurfaceRef.current;
+    if (!surface) return;
+    surface.scrollTo({
+      top: surface.clientHeight * 1.82,
       behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
     });
   };
@@ -1221,6 +1354,12 @@ export default function HumanoidStory({
       }}
     >
       <Scene persona={persona} />
+
+      {/* Decoupled scroll surface: a fixed overlay owns the scrolling, so the cinematic
+          layers are freed from document flow while native momentum, the scrollbar and
+          keyboard paging all keep working. Fixed children inside it stay viewport-fixed. */}
+      <div className="hm-scroll-surface" ref={scrollSurfaceRef}>
+      <div className="hm-sticky-stage">
 
       <header className="hm-header">
         <Link className="hm-brand" to="/">
@@ -1272,12 +1411,15 @@ export default function HumanoidStory({
         motionActive={motionActive}
       />
 
+      </div>
+
       <main className="hm-scroll-story">
         <div className="hm-story-lead" />
         {normalizedSlides.map((slide, index) => (
           <section
             className="hm-story-step"
             ref={(node) => { stepRefs.current[index] = node; }}
+            style={{ minHeight: `${getStepHeight(index, normalizedSlides.length)}vh` }}
             aria-label={`${index + 1} of ${normalizedSlides.length}: ${slide.title}`}
             key={slide.id}
           >
@@ -1286,6 +1428,8 @@ export default function HumanoidStory({
         ))}
         <div className="hm-story-tail" />
       </main>
+
+      </div>
 
       {detailOpen && (
         <div className="hm-detail-overlay" role="presentation" onMouseDown={(event) => {
