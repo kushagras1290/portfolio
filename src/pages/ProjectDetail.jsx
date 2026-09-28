@@ -44,7 +44,7 @@ export default function ProjectDetail() {
   const nextProject = projectIndex < ALL_PROJECTS.length - 1 ? ALL_PROJECTS[projectIndex + 1] : null;
   const category = getCategoryLabel(project);
   const commonPrimary = project.link
-    ? { href: project.link, label: 'Visit live project' }
+    ? { href: project.link, label: project.linkLabel || 'Visit live project' }
     : { to: '/projects', label: 'All projects' };
 
   const slides = [
